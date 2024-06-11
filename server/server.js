@@ -1,6 +1,7 @@
 const express =require('express');
 const mongoose =require('mongoose');
 const cors =require('cors');
+require("dotenv").config();
 const route = require("./Routes/index");
 const image = require('./Models/imageModel');
 const bodyParser = require('body-parser');
@@ -28,7 +29,7 @@ mongoose.set('strictQuery',false);
 
 
 
-const MongoAtlas = "mongodb+srv://jedidiahAkinlaja:jedidiahAkinlaja@cluster0.wfy398f.mongodb.net/FinalProject?retryWrites=true&w=majority&appName=Cluster0";
+const MongoAtlas = process.env.MONGO_URL;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
