@@ -1,0 +1,44 @@
+<header class="header container-fluid border border-success">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="float-start">FBOOK</div>
+        </div>
+        <div class="col-sm-6">
+            <div class="float-end">
+                <button class="float-start mx-2" routerLinkActive="active" routerLink="/dashboard" >Home</button>
+                <button class="float-start mx-2" routerLinkActive="active" routerLink="/">Network</button>
+                <button class="float-start mx-2" routerLinkActive="active" routerLink="/header" >Friends</button>
+                <button class="float-start mx-2" routerLinkActive="active" routerLink="/setting">Settings</button>
+                <button class="float-start mx-2" (click)="logout()">Logout</button>
+            </div>
+        </div>     
+    </div>
+  </header>
+
+
+<div class="container my-5">
+    <table class="table table-bordered table-sm">
+        <thead >
+          <tr>
+            <th>Profile Settings</th>
+            <th>Change Password</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor=" let list of lists">
+            <td>{{list.firstname}}</td>
+            <td>{{list.lastname}}</td>
+          </tr>
+          <tr *ngFor=" let list of lists">
+            <td>Male<input type="text"></td>
+            <td></td>
+          </tr>
+          <tr *ngFor=" let list of lists">
+            <td>July</td>
+            <td>Dooley</td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+  
+  

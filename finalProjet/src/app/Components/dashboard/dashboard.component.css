@@ -1,0 +1,22 @@
+.header{
+    height:70px;
+    padding-bottom:10px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
+.userphoto{
+    height: 132px;
+    width: 118px;
+    border-radius: 50%;
+    border: 2px solid green;
+    margin-top: 0px;
+}
+
+
+
+.filltext{
+    height:200px;
+    border: 2px solid red;
+    margin-top: 50px;
+}

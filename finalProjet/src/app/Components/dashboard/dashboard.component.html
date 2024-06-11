@@ -1,0 +1,81 @@
+<header class="header container-fluid border border-success">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="float-start">FBOOK</div>
+        </div>
+        <div class="col-sm-6">
+            <div class="float-end">
+                <button class="float-start mx-2" routerLinkActive="active" routerLink="/dashboard" >Home</button>
+                <button class="float-start mx-2" routerLinkActive="active" routerLink="/">Network</button>
+                <button class="float-start mx-2" routerLinkActive="active" routerLink="/header" >Friends</button>
+                <button class="float-start mx-2" routerLinkActive="active" routerLink="/setting">Setting</button>
+                <button class="float-start mx-2" (click)="logout()" >Logout</button>
+            </div>
+        </div>     
+    </div>
+  </header>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4 border border-success">
+            <div class="row border border-danger">
+                <div class="col-sm-12">
+                        <div class="userphoto position-relative top-50 start-50 translate-middle">
+                            <div *ngIf="imageData">
+                                <img [src]="imageData" [alt]="form.value.name" />
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="row border border-danger">
+                <div class="col-sm-12">
+                    <p>XXX CONNETION</p>
+                </div>
+            </div>
+            <div class="row border border-danger">
+                <div class="col-sm-12">
+                    <p>XXX POSITION</p>
+                </div>
+            </div>
+        </div>
+
+        <div class=" offset-sm-2 col-sm-6 border border-success">
+            <div class="row">
+
+                <div class=" col-sm-10 form-group">
+                    <input type="text" class="form-control" placeholder="Write new Post/Upload pic">
+                </div>
+
+                <button class="col-sm-2  btn btn-primary">Post</button>
+            </div>
+            <div class="row ">
+                <div class="col-sm-12">
+                  <div class="filltext">
+
+                    <h1>Create Profile</h1>
+                    <hr />
+                    <form [formGroup]="form" (submit)="onSubmit()">
+                        <div>
+                            <input formControlName="name" type="text" placeholder="Enter name..." />
+                        </div>
+                        <div>
+                            <input type="file" (change)="onFileSelect($event)" />
+                        </div>
+                        
+                        <div>
+                            <button type="submit">Create profile</button>
+                        </div>
+                    </form>
+                    
+                    <p>{{conso}}</p>
+                    <p>im here</p>
+                  </div>
+                </div>
+              
+            </div>
+        </div>
+    </div>
+</div>
+  
+  
