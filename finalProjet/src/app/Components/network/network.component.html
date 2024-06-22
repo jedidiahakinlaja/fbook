@@ -6,10 +6,10 @@
         <div class="col-sm-6">
             <div class="float-end">
                 <button class="float-start mx-2" routerLinkActive="active" routerLink="/header" >Home</button>
-                <button class="float-start mx-2" routerLinkActive="active" routerLink="/">Network</button>
-                <button class="float-start mx-2" routerLinkActive="active" routerLink="/header" >Friends</button>
-                <button class="float-start mx-2" routerLinkActive="active" routerLink="/">Settings</button>
-                <button class="float-start mx-2" routerLinkActive="active" routerLink="/">Logout</button>
+                <button class="float-start mx-2" routerLinkActive="active" routerLink="/network">Network</button>
+                <button class="float-start mx-2" routerLinkActive="active" routerLink="/friends" >Friends</button>
+                <button class="float-start mx-2" routerLinkActive="active" routerLink="/settings">Settings</button>
+                <button class="float-start mx-2" (click)="logout()">Logout</button>
             </div>
         </div>     
     </div>

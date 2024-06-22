@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthserviceService } from 'src/app/_service/authservice.service';
 
 @Component({
   selector: 'app-friends',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FriendsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService:AuthserviceService, private route:Router) { }
 
   ngOnInit(): void {
+  }
+
+  logout() {
+    this.authService.logout();
+    this.route.navigate(['/']);
   }
 
 }
