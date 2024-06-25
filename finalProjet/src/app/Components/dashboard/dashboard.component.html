@@ -38,6 +38,15 @@
                     <p>XXX POSITION</p>
                 </div>
             </div>
+            <!-- <form action="http:", method="PUT", enctype="multipart/form-data">
+                <input type="file" name="image">
+                <button type="submit">Upload Profile Image</button>
+            </form> -->
+          
+            <div>
+                <input type="file" (change)="onFileSelected($event)">
+                <button (click)="onUpload()">Upload</button>
+              </div>
         </div>
 
         <div class=" offset-sm-2 col-sm-6 border border-success">

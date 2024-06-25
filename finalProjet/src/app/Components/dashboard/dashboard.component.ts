@@ -14,6 +14,8 @@ export class DashboardComponent implements OnInit {
   form!: FormGroup 
   profile: Profile | any;
   imageData: string | any;
+  selectedFile: File | null = null;
+
   constructor(private authService:AuthserviceService,
     private route:Router
   ) {
@@ -33,6 +35,21 @@ export class DashboardComponent implements OnInit {
   ppUser(){ 
    return this.conso=localStorage.getItem('user');
   }
+
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+  }
+
+  onUpload(): void {
+    if (this.selectedFile) {
+      this.authService.uploadImage(this.selectedFile).subscribe(
+        response => console.log('Upload successful', response),
+        error => console.error('Upload error', error)
+      );
+    }
+     }
+
+
   
   
 
@@ -53,6 +70,9 @@ export class DashboardComponent implements OnInit {
     this.authService.addProfile(this.form.value.name, this.form.value.image,this.conso);
     this.form.reset();
     this.imageData = null;
+  }
+  onImgSubmit(){
+
   }
 
   logout() {

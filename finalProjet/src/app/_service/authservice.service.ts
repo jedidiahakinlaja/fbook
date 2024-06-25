@@ -139,6 +139,13 @@ export class AuthserviceService {
         });
     }
 
+    uploadImage(image: File): Observable<any> {
+      const formData: FormData = new FormData();
+      formData.append('image', image, image.name);
+
+      return this.http.put(`http://localhost:5500/users/${this.user}`, formData);
+    }
+
 
         logout() {
           // remove user from local storage and set current user to null

@@ -35,6 +35,8 @@ app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
 app.use('/images', express.static(path.join('images')));
 
+app.use(express.static('public'));
+
 
 mongoose.connect(MongoAtlas, {
     useNewUrlParser: true,

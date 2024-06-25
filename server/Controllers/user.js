@@ -119,3 +119,31 @@ exports.getUserById = async (req, res) => {
         })
 }
 
+exports.putImageByUsername= (req,res)=>{
+    const {image}= req.file.filename;
+    const { usernameId } = req.params;
+
+        User.findOneAndUpdate({username:usernameId }, {})
+    .then(response => {
+        if(response){
+            const userObj = new User ({
+              image
+            });
+            userObj.save()
+            .then(response => {
+                res.status(200).json({
+                    message: "User Image Saved Successfully",
+                    signup: response
+                }) 
+            })
+            .catch( err => {
+                res.status(500).json({ error: err })
+            })
+        }
+        
+    })
+    .catch(err => {
+        res.status(500).json({ error: err })
+    })
+}
+
