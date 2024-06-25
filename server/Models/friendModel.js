@@ -1,19 +1,18 @@
 const mongoose = require('mongoose');
 
-const postSchema = mongoose.Schema({
-  name: { 
-        type:mongoose.Schema.Types.ObjectId, 
-        ref:'user'
+const friendSchema = mongoose.Schema({
+  senderId: { 
+          type: String,
+          required: true
       },
-  imagePath: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref:'user'
+  receiverId: { 
+          type: String,
+          required: true
    },
-   status:{
-        type: mongoose.Schema.Types.ObjectId, 
-        ref:'user'
+   stat:{
+        type: String,
    }
 
 });
 
-module.exports = mongoose.model('post', postSchema);
+module.exports = mongoose.model('friend', friendSchema);

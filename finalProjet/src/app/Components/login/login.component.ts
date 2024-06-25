@@ -34,7 +34,6 @@ export class LoginComponent implements OnInit {
   onLogin(){
     this.authService.loginUser(this.loginForm.value.username,this.loginForm.value.password);
     this.idUser=this.loginForm.value.username;
-    localStorage.setItem('user',this.idUser);
     this.loginForm.reset();
   }
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthserviceService } from 'src/app/_service/authservice.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-setting',
@@ -13,13 +14,19 @@ lists: any;
   constructor(
     private authService:AuthserviceService,
     private route:Router
-  ) { } 
+  ) { 
+   
+  } 
 
   ngOnInit(): void {
-    this.authService.getuserDetails().subscribe((res)=>{
-      console.log(res);
+    this.authService.getuserDetails().pipe(map((response)=>{
+      console.log(response);
+      return response;
+      
+    })).subscribe((res)=>{
       this.lists=res;
-    })
+      console.log(this.lists);
+      })
   }
 
   logout() {

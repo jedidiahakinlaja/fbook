@@ -32,10 +32,10 @@ exports.postRegister = (req, res) => {
 
 
 
-exports.postlogin = (req, res) => {
+exports.postlogin = async (req, res) => {
     const { username, password } = req.body;
     let userFound;
-    User.findOne({
+   await User.findOne({
         username
     })
     .then(user => {
@@ -55,7 +55,9 @@ exports.postlogin = (req, res) => {
         }
         const token = jwt.sign({username:userFound.username,userId:userFound._id},"secret_string",{expiresIn:"1h"})
         return res.status(200).json({
-            token:token
+            token:token,
+            username:username,
+            userId:userFound._id
         })
     })
     .catch( err => {
@@ -65,8 +67,8 @@ exports.postlogin = (req, res) => {
     })
 }
 
-exports.getUsers=(req, res, next) => {
-    User.find()
+exports.getUsers= async (req, res, next) => {
+   await User.find()
     .then((data) => {
         res.json(data);
     })
@@ -75,11 +77,11 @@ exports.getUsers=(req, res, next) => {
     })
 }
 
-exports.getUserByUsername = (req, res) => {
+exports.getUserByUsername =async (req, res) => {
 
     const { usernameId } = req.params;
     
-    User.find({username:usernameId }, {})
+   await User.find({username:usernameId }, {})
         .then(response => {
             res.status(200).json(response)
         })
@@ -88,11 +90,11 @@ exports.getUserByUsername = (req, res) => {
         })
 }
 
-exports.getUserByEmail = (req, res) => {
+exports.getUserByEmail = async (req, res) => {
 
     const { emailId } = req.params;
     
-    User.find({email:emailId }, {})
+   await User.find({email:emailId }, {})
         .then(response => {
             res.status(200).json(response)
         })
@@ -101,11 +103,11 @@ exports.getUserByEmail = (req, res) => {
         })
 }
 
-exports.getUserById = (req, res) => {
+exports.getUserById = async (req, res) => {
 
     const { id } = req.params;
     
-    Restaurant.findById(id)
+    await Restaurant.findById(id)
         .then(response => {
             res.status(200).json({
                 message: "Restaurant By Id Fetched Successfully",

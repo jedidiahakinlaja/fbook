@@ -15,6 +15,7 @@ export interface AuthModel3{
     username:string
 }
 export interface AuthModel4{
+id: any;
     firstname:string,
     lastname:string,
     username:string,
@@ -27,3 +28,8 @@ export interface Profile {
     imagePath: string;
     username:string;
   }
+export interface RequestModel{
+    senderId:string,
+    receiverId:string,
+    stat:string
+}

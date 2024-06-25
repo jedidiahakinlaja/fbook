@@ -17,23 +17,24 @@ export class DashboardComponent implements OnInit {
   constructor(private authService:AuthserviceService,
     private route:Router
   ) {
-    this.ppUser();
-    
+     this.authService.getuserDetails().subscribe((res)=>{
+      console.log(res);
+    })
    }
 
   ngOnInit(): void {
+    // console.log(this.conso);
     this.form = new FormGroup({
       name: new FormControl(null),
       image: new FormControl(null),
     });
-    console.log(this.conso);
-    this.authService.getuserDetails().subscribe((res)=>{
-      console.log(res);
-    })
+    
   }
   ppUser(){ 
    return this.conso=localStorage.getItem('user');
   }
+  
+  
 
   onFileSelect(event: Event) {
     const file = (event.target as HTMLInputElement).files![0];

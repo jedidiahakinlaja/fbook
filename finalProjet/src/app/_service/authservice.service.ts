@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http'
-import { AuthModel, AuthModel2, AuthModel3, AuthModel4,Profile} from './authModel';
+import { AuthModel, AuthModel2, AuthModel3, AuthModel4,Profile, RequestModel} from './authModel';
 import { map,Observable,Subject } from 'rxjs';
 import { Router } from '@angular/router';
 @Injectable({
@@ -10,6 +10,8 @@ export class AuthserviceService {
   private token!: string;
   private authenticationSub = new Subject<boolean>();
   private isAuthenticated =false;
+  user:string | any;
+  user_id!:string
   conso: string | any;
   detail: any;
   private profiles: Profile[] = [];
@@ -30,7 +32,8 @@ export class AuthserviceService {
     private http:HttpClient,
     private route:Router
   ) { 
-    this.getusr();
+     this.getuserDetails();
+     this.getusr();
   }
 
     registerUser(firstname:string, lastname:string, username:string, password:string, email:string, dob:Date ){
@@ -47,34 +50,57 @@ export class AuthserviceService {
         })
     }
 
+    getusr(){
+      return this.user=localStorage.getItem('user');
+    }
+   
+
+    sendRequest(senderId:string, receiverId:string, stat:string){
+      const requestModel:RequestModel={
+        senderId:senderId,
+        receiverId:receiverId,
+        stat:stat
+      }
+
+      this.http.post('http://localhost:5500/friendrequest',requestModel).subscribe(res=>{
+        console.log(res);
+      })
+    }
+
     loginUser(username:string,password:string){
         const authData:AuthModel2={username:username,password:password}
-        this.http.post<{token:string}>('http://localhost:5500/login',authData).subscribe(res=>{
+        this.http.post<any>('http://localhost:5500/login',authData).subscribe(res=>{
           this.token=res.token
+          this.user=res.username
+          this.user_id=res.userId
+          console.log(res.userId);
           if(this.token){
             this.authenticationSub.next(true);
             this.isAuthenticated=true;
             this.route.navigate(['dashboard']);
           }
-        })
-    }
+          localStorage.setItem('user',this.user);
+          localStorage.setItem('senderId',this.user_id);
 
-    getUser():Observable<any>{
-       return this.http.post<any>('http://localhost:5500/users',this.conso)
-     
-    }
-    
-    getusr(){
-      return this.conso=localStorage.getItem('user');
+        })
+        
+    } 
+
+
+    getuserDetails():Observable<any>{
+      console.log(this.user);
+      return this.http.get<any>(`http://localhost:5500/users/${this.user}`);
+      
     }
 
     getAllUser():Observable<AuthModel4[]>{
       return this.http.get<AuthModel4[]>('http://localhost:5500/user');
     }
 
-    getuserDetails():Observable<any>{
-      return this.http.get<any>(`http://localhost:5500/users/${this.conso}`)
-    }
+    getUser():Observable<any>{
+      return this.http.post<any>('http://localhost:5500/users',this.user);
+    
+   }
 
     getProfiles() {
       this.http
@@ -112,10 +138,13 @@ export class AuthserviceService {
           this.profiles$.next(this.profiles);
         });
     }
-    logout() {
-      // remove user from local storage and set current user to null
-      localStorage.removeItem('user');
-  }
+
+
+        logout() {
+          // remove user from local storage and set current user to null
+          localStorage.removeItem('user');
+          localStorage.removeItem('senderId');
+      }
   
     
 }
