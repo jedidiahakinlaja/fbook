@@ -7,11 +7,12 @@ import { AuthserviceService } from '../../_service/authservice.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
+
 export class HeaderComponent implements OnInit {
   registerForm!: FormGroup;
    myForm: any;
   loginUser: any;
-
+  image:any;
   constructor(
     private fb:FormBuilder,
     private authService:AuthserviceService
@@ -37,7 +38,8 @@ export class HeaderComponent implements OnInit {
       this.registerForm.value.username,
       this.registerForm.value.password,
       this.registerForm.value.email,
-      this.registerForm.value.dob
+      this.registerForm.value.dob,
+      this.image=""
     )
       
       this.registerForm.reset();

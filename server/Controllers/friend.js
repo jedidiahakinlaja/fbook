@@ -33,3 +33,44 @@ exports.getFriends= async (req, res) => {
          console.log('Error fetching entries')
      })
  }
+
+
+ exports.getBySenderId = (req, res) => {
+
+
+    const { senderId } = req.params;
+    const updatedMovies = req.body
+    
+    Friend.find({senderId:senderId},{})
+        .then(response => {
+            res.status(200).json({
+                message: "Request Successfully Acccepted",
+                restaurants: response
+            })
+        })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        })
+}
+
+ exports.putBySenderId = (req, res) => {
+
+
+    const { senderId } = req.params;
+    // const sendres = req.body
+    
+    Friend.updateOne({senderId:senderId},{ $set:
+        {
+            stat: req.body.stat
+         }
+    })
+        .then(response => {
+            res.status(200).json({
+                message: "Request Successfully Acccepted",
+                restaurants: response
+            })
+        })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        })
+}

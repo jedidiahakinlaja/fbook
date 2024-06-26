@@ -11,11 +11,14 @@ export class AuthserviceService {
   private authenticationSub = new Subject<boolean>();
   private isAuthenticated =false;
   user:string | any;
-  user_id!:string
+  user_id:string |any;
   conso: string | any;
   detail: any;
   private profiles: Profile[] = [];
   private profiles$ = new Subject<Profile[]>();
+  private imageId :any;
+  private imageId$ = new Subject<Profile[]>();
+
   readonly url = "http://localhost:5500/uploads";
   getToken(){
     return this.token
@@ -34,16 +37,18 @@ export class AuthserviceService {
   ) { 
      this.getuserDetails();
      this.getusr();
+     this. getimgid();
   }
 
-    registerUser(firstname:string, lastname:string, username:string, password:string, email:string, dob:Date ){
+    registerUser(firstname:string, lastname:string, username:string, password:string, email:string, dob:Date, image:string ){
       const authModel:AuthModel={
         firstname: firstname,
         lastname: lastname,
         username:username,
         password: password,
         email: email,
-        dob:dob
+        dob:dob,
+        image:image
       }
         this.http.post('http://localhost:5500/register',authModel).subscribe(res=>{
           console.log(res);
@@ -52,6 +57,9 @@ export class AuthserviceService {
 
     getusr(){
       return this.user=localStorage.getItem('user');
+    }
+    getimgid(){
+      return this.user_id=localStorage.getItem('senderId');
     }
    
 
@@ -102,6 +110,27 @@ export class AuthserviceService {
     
    }
 
+  //  getUserbyId():Observable<any>{
+  //   return this.http.get<any>('http://localhost:5500/user/'+this.user_id);
+  // }
+
+  getUserbyId(){
+    return this.http.get<any>('http://localhost:5500/user/'+this.user_id)
+    .pipe(
+      map((res) => {
+        return res
+      })
+    )
+    .subscribe((res) => {
+      this.imageId = res;
+      this.imageId$.next(this.imageId);
+    });
+  }
+
+  getUserIdStream(){
+    return this.imageId$.asObservable();
+  }
+
     getProfiles() {
       this.http
         .get<{ profiles: Profile[] }>(this.url)
@@ -142,8 +171,9 @@ export class AuthserviceService {
     uploadImage(image: File): Observable<any> {
       const formData: FormData = new FormData();
       formData.append('image', image, image.name);
+      console.log(this.user_id);
 
-      return this.http.put(`http://localhost:5500/users/${this.user}`, formData);
+      return this.http.put('http://localhost:5500/user/'+this.user_id, formData);
     }
 
 

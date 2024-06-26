@@ -13,11 +13,15 @@ route.post('/upload',imageController.image);
 route.get('/user',userController.getUsers);
 route.get('/users/:usernameId',userController.getUserByUsername);
 route.get('/email/:emailId',userController.getUserByEmail);
-route.get('/users/:id',userController.getUserById);
+route.get('/user/:id',userController.getUserById);
 route.get('/profile', profilesController.getProfiles);
 route.post('/uploads', storage, profilesController.postProfile);
 route.get('/profile/:usernameId',profilesController.getImageByUsername);
 route.post('/friendrequest',friendController.friendRegister);
 route.get('/friend',friendController.getFriends);
-route.put('/users:usernameId', helps, userController.putImageByUsername);
+route.put('/user/:id', helps, userController.putImageById);
+route.get('/friend/:senderId',friendController.getBySenderId);
+route.put('/friend/:senderId', friendController.putBySenderId);
+
+
 module.exports = route;

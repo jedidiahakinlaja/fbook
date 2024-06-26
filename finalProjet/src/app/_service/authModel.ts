@@ -4,7 +4,8 @@ export interface AuthModel{
     username:string,
     password:string,
     email:string,
-    dob:Date
+    dob:Date,
+    image:string
 }
 
 export interface AuthModel2{

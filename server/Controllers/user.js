@@ -2,7 +2,7 @@ const User = require('../Models/userModel');
 const bcrypt =require('bcrypt');
 const jwt = require('jsonwebtoken');
 exports.postRegister = (req, res) => {
-    const { firstname, lastname, username, email,  password, dob } = req.body;
+    const { firstname, lastname, username, email,  password, dob, image } = req.body;
     bcrypt.hash(password,10)
       .then(hash=>{
         const userObj = new User ({
@@ -11,7 +11,8 @@ exports.postRegister = (req, res) => {
             username,
             email,
             dob,
-           password:hash
+           password:hash,
+           image
         });
  
         userObj.save()
@@ -107,12 +108,9 @@ exports.getUserById = async (req, res) => {
 
     const { id } = req.params;
     
-    await Restaurant.findById(id)
+    await User.findById(id)
         .then(response => {
-            res.status(200).json({
-                message: "Restaurant By Id Fetched Successfully",
-                restaurants: response
-            })
+            res.status(200).json(response)
         })
         .catch(err => {
             res.status(500).json({ error: err })
@@ -120,30 +118,36 @@ exports.getUserById = async (req, res) => {
 }
 
 exports.putImageByUsername= (req,res)=>{
-    const {image}= req.file.filename;
+
     const { usernameId } = req.params;
 
         User.findOneAndUpdate({username:usernameId }, {})
-    .then(response => {
-        if(response){
-            const userObj = new User ({
-              image
-            });
-            userObj.save()
-            .then(response => {
-                res.status(200).json({
-                    message: "User Image Saved Successfully",
-                    signup: response
-                }) 
-            })
-            .catch( err => {
-                res.status(500).json({ error: err })
-            })
-        }
+        .then(response => {
+            res.status(200).json(response)
+        })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        })
+
         
-    })
-    .catch(err => {
-        res.status(500).json({ error: err })
-    })
 }
 
+
+exports.putImageById = (req, res) => {
+
+
+    const { id } = req.params;
+  
+    
+     User.updateOne({_id:id},{ $set:{
+
+        image:'http://localhost:5500/img/'+ req.file.filename
+       }
+    })
+        .then(response => {
+            res.status(200).json(response)
+        })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        })
+}

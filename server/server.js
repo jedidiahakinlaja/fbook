@@ -34,8 +34,9 @@ const MongoAtlas = process.env.MONGO_URL;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
 app.use('/images', express.static(path.join('images')));
+app.use('/img', express.static(path.join('img')));
 
-app.use(express.static('public'));
+// app.use(express.static('publics'));
 
 
 mongoose.connect(MongoAtlas, {

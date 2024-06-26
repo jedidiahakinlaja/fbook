@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Profile } from 'src/app/_service/authModel';
 import { AuthserviceService } from 'src/app/_service/authservice.service';
 
@@ -9,12 +10,15 @@ import { AuthserviceService } from 'src/app/_service/authservice.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   conso: string | any
   form!: FormGroup 
   profile: Profile | any;
   imageData: string | any;
   selectedFile: File | null = null;
+  imageIdData:any;
+  imagesubImage:string|any;
+  private imageIdSubcription:Subscription;
 
   constructor(private authService:AuthserviceService,
     private route:Router
@@ -22,6 +26,15 @@ export class DashboardComponent implements OnInit {
      this.authService.getuserDetails().subscribe((res)=>{
       console.log(res);
     })
+       this.authService.getUserbyId();
+      this.imageIdSubcription=this.authService.getUserIdStream().subscribe((res)=>{
+      console.log(res);
+      this.imageIdData=res;
+      this.imagesubImage=this.imageIdData.image
+      console.log(this.imagesubImage)
+    })
+     
+
    }
 
   ngOnInit(): void {
@@ -29,9 +42,13 @@ export class DashboardComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl(null),
       image: new FormControl(null),
-    });
-    
-  }
+         })
+     }
+
+     ngOnDestroy(){
+      this.imageIdSubcription.unsubscribe();
+     }
+
   ppUser(){ 
    return this.conso=localStorage.getItem('user');
   }
