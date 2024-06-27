@@ -31,7 +31,7 @@ exports.getFriends= async (req, res) => {
     .populate('img','image firstname lastname')
     .exec()
      .then((data) => {
-         res.json({data});
+         res.json(data);
      })
      .catch(() => {
          console.log('Error fetching entries')
@@ -83,10 +83,7 @@ exports.getByReceiverId = (req, res) => {
     
     Friend.find({receiverId:receiverId},{})
         .then(response => {
-            res.status(200).json({
-                message: "Request Successfully Acccepted",
-                restaurants: response
-            })
+            res.status(200).json(response)
         })
         .catch(err => {
             res.status(500).json({ error: err })
