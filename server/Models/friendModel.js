@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const friendSchema = mongoose.Schema({
+   
   senderId: { 
           type: String,
           required: true
@@ -11,6 +12,9 @@ const friendSchema = mongoose.Schema({
    },
    stat:{
         type: String,
+   },
+   img:{
+      type:mongoose.Schema.Types.ObjectId, ref:'userDetails'
    }
 
 });

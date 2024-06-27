@@ -14,6 +14,7 @@ export class AuthserviceService {
   user_id:string |any;
   conso: string | any;
   detail: any;
+  selected_id:any;
   private profiles: Profile[] = [];
   private profiles$ = new Subject<Profile[]>();
   private imageId :any;
@@ -37,7 +38,8 @@ export class AuthserviceService {
   ) { 
      this.getuserDetails();
      this.getusr();
-     this. getimgid();
+     this.getimgid();
+     this.getSelected_id();
   }
 
     registerUser(firstname:string, lastname:string, username:string, password:string, email:string, dob:Date, image:string ){
@@ -63,17 +65,27 @@ export class AuthserviceService {
     }
    
 
-    sendRequest(senderId:string, receiverId:string, stat:string){
+    sendRequest(senderId:string, receiverId:string, stat:string, img:string){
       const requestModel:RequestModel={
         senderId:senderId,
         receiverId:receiverId,
-        stat:stat
+        stat:stat,
+        img:img
       }
 
       this.http.post('http://localhost:5500/friendrequest',requestModel).subscribe(res=>{
         console.log(res);
       })
     }
+
+    getSelected_id(){
+      return this.selected_id=localStorage.getItem('senderId');
+     }
+
+    friendRequested(stat:string){
+      this.http.put<any>('http://localhost:5500/checkfriendrequest/'+this.selected_id, stat)
+    }
+
 
     loginUser(username:string,password:string){
         const authData:AuthModel2={username:username,password:password}
@@ -110,9 +122,9 @@ export class AuthserviceService {
     
    }
 
-  //  getUserbyId():Observable<any>{
-  //   return this.http.get<any>('http://localhost:5500/user/'+this.user_id);
-  // }
+  getActionRequest():Observable<any>{
+    return this.http.get<any>('http://localhost:5500/checkfriendrequest/'+this.user_id)
+  }
 
   getUserbyId(){
     return this.http.get<any>('http://localhost:5500/user/'+this.user_id)

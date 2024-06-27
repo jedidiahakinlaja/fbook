@@ -2,12 +2,13 @@ const Friend = require('../Models/friendModel');
 
 exports.friendRegister =async (req, res) => {
 
-        const { senderId, receiverId, stat } = req.body;
+        const { senderId, receiverId, stat, img } = req.body;
 
         const friendObj = new Friend ({
             senderId, 
             receiverId,
-            stat
+            stat,
+            img
         });
 
        await friendObj.save()
@@ -26,6 +27,9 @@ exports.friendRegister =async (req, res) => {
 
 exports.getFriends= async (req, res) => {
     await Friend.find()
+    .select()
+    .populate('img','image firstname lastname')
+    .exec()
      .then((data) => {
          res.json({data});
      })
@@ -53,17 +57,34 @@ exports.getFriends= async (req, res) => {
         })
 }
 
- exports.putBySenderId = (req, res) => {
+ exports.putByReceiverId = (req, res) => {
 
 
-    const { senderId } = req.params;
+    const { receiverId } = req.params;
     // const sendres = req.body
     
-    Friend.updateOne({senderId:senderId},{ $set:
+    Friend.updateOne({receiverId:receiverId},{ $set:
         {
             stat: req.body.stat
          }
     })
+        .then(response => {
+            res.status(200).json({
+                message: "Request Successfully Acccepted",
+                restaurants: response
+            })
+        })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        })
+}
+
+exports.getByReceiverId = (req, res) => {
+
+
+    const { receiverId } = req.params;
+    
+    Friend.find({receiverId:receiverId},{})
         .then(response => {
             res.status(200).json({
                 message: "Request Successfully Acccepted",

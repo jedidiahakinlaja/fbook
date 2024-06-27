@@ -32,5 +32,6 @@ export interface Profile {
 export interface RequestModel{
     senderId:string,
     receiverId:string,
-    stat:string
+    stat:string,
+    img:string
 }

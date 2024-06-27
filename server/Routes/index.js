@@ -21,7 +21,7 @@ route.post('/friendrequest',friendController.friendRegister);
 route.get('/friend',friendController.getFriends);
 route.put('/user/:id', helps, userController.putImageById);
 route.get('/friend/:senderId',friendController.getBySenderId);
-route.put('/friend/:senderId', friendController.putBySenderId);
+route.put('/checkfriendrequest/:receiverId', friendController.putByReceiverId);
+route.get('/checkfriendrequest/:receiverId', friendController.getByReceiverId);
 
-
-module.exports = route;
+module.exports = route; 

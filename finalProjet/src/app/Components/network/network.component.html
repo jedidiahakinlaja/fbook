@@ -16,13 +16,15 @@
   </header>
 
 
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-sm-4 border border-success">
+        <div class="  offset-sm-1 col-sm-3 border border-success">
             <div class="row border border-danger">
                 <div class="col-sm-12">
                         <div class="userphoto position-relative top-50 start-50 translate-middle">
-                            <img src="" alt="not found">
+                            <div *ngIf="imagesubImage">
+                                <img [src]="imagesubImage" class="img-fluid img-thumbnail" style="width: 200px; height:140px; border-radius: 50%;" />
+                            </div>
                         </div>
                     </div>
             </div>
@@ -38,23 +40,45 @@
             </div>
         </div>
 
-        <div class=" offset-sm-2 col-sm-6 border border-success">
-            <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let net of network ">
-                    <td>{{net.firstname}}</td>
-                    <td><button class="btn btn-primary" (click)="request(net._id)">Request</button></td>
-                    <td>Pending</td>
-                  </tr>
-                </tbody>
-              </table>
+        <div class=" offset-sm-1 col-sm-7 border border-success">
+            <div class="row">
+                <div class="col-sm-6  border border-success">
+                    <p style="text-align: center;">Network</p>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">First</th>
+                            <th scope="col">Last</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let net of network ">
+                            <td>{{net.firstname}}</td>
+                            <td><button class="btn btn-primary" (click)="request(net._id)">Request</button></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+
+                <div class="col-sm-6  border border-success ">
+                    <p  style="text-align: center;">Friend Request Sent</p>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">First</th>
+                            <th scope="col">Last</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let nets of requestlists ">
+                            <td>{{nets.firstname}}</td>
+                            <td><button class="btn btn-primary" (click)="acceptRequest(nets._id)">Request</button></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+            
         </div>
     </div>
 </div>
