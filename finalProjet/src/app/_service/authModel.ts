@@ -35,3 +35,7 @@ export interface RequestModel{
     stat:string,
     img:string
 }
+
+export interface selectModel{
+    stat:string
+}

@@ -61,7 +61,6 @@ exports.getFriends= async (req, res) => {
 
 
     const { receiverId } = req.params;
-    // const sendres = req.body
     
     Friend.updateOne({receiverId:receiverId},{ $set:
         {
@@ -70,6 +69,24 @@ exports.getFriends= async (req, res) => {
     })
         .then(response => {
             res.status(200).json(response)
+        })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        })
+}
+exports.putById = (req, res) => {
+
+
+    const { id } = req.params;
+    
+    Friend.updateOne({_id:id},{ $set:
+        {
+            stat: req.body.stat
+         }
+    })
+        .then(response => {
+            res.status(200).json(response)
+            console.log("impactedcl");
         })
         .catch(err => {
             res.status(500).json({ error: err })

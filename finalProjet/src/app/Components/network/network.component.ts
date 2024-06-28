@@ -15,19 +15,21 @@ export class NetworkComponent implements OnInit, OnDestroy  {
   lists: any;
   senderId:any;
   stat:any;
+  stats:any;
   imageData: string | any;
   imageIdData:any;
   imagesubImage:string|any;
   img:any;
   requestlists:any;
   selected_id:any
+  hideUser:any;
 
   private imageIdSubcription:Subscription;
   constructor(
     private authService:AuthserviceService,
     private route:Router
   ) {
-
+     this.getUsername();
     this.authService.getAllUser().pipe(map((response)=>{
       return response;
       
@@ -74,6 +76,13 @@ export class NetworkComponent implements OnInit, OnDestroy  {
        return this.senderId;
      }
 
+     getUsername(){
+      this.hideUser = localStorage.getItem('user');
+      console.log('hideen',this.hideUser);
+      return this.hideUser;
+     
+    }
+
      request(receiverId:any){
       this.getUserId();
       console.log(receiverId);
@@ -83,11 +92,16 @@ export class NetworkComponent implements OnInit, OnDestroy  {
      }
 
 
-     acceptRequest(id:any){
-      this.selected_id=id
+     acceptRequest(selectid:any){
+      this.selected_id=selectid
       localStorage.setItem('selected_id',this.selected_id);
       this.stat="request accepted";
+      this.getSelectid();
       this.authService.friendRequested(this.stat);
+     }
+
+     getSelectid(){
+      return this.selected_id=localStorage.getItem('selected_id');
      }
 
   logout() {

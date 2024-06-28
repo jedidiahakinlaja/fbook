@@ -53,8 +53,8 @@
                         </thead>
                         <tbody>
                           <tr *ngFor="let net of network ">
-                            <td>{{net.firstname}}</td>
-                            <td><button class="btn btn-primary" (click)="request(net._id)">Request</button></td>
+                            <td *ngIf="hideUser!=net.username">{{net.firstname}}</td>
+                            <td *ngIf="hideUser!=net.username"><button class="btn btn-primary" (click)="request(net._id)">Request</button></td>
                           </tr>
                         </tbody>
                       </table>

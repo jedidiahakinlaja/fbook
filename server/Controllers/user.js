@@ -32,7 +32,6 @@ exports.postRegister = (req, res) => {
 }
 
 
-
 exports.postlogin = (req, res) => {
     const { username, password } = req.body;
     let userFound;
@@ -46,14 +45,14 @@ exports.postlogin = (req, res) => {
             })
         }
         userFound= user
-        return bcrypt.compare(req.body.password,user.password)
-    })
-    .then(result => {
+        const result =bcrypt.compare(req.body.password,user.password)
+
         if(!result){
             return res.status(401).json({
                 message:"Password is incorrect"
             })
         }
+
         const token = jwt.sign({username:userFound.username,userId:userFound._id},"secret_string",{expiresIn:"1h"})
         return res.status(200).json({
             token:token,
@@ -61,13 +60,15 @@ exports.postlogin = (req, res) => {
             userId:userFound._id
         })
     })
+
     .catch( err => {
-        res.status(401).json({ 
-            message:'Error with authenication',
-            error:err
-         })
-    })
+        return res.status(500).json(
+             {error:err}
+          )
+     })
+    
 }
+
 
 exports.getUsers= async (req, res, next) => {
    await User.find()

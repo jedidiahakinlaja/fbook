@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http'
-import { AuthModel, AuthModel2, AuthModel3, AuthModel4,Profile, RequestModel} from './authModel';
+import { AuthModel, AuthModel2, AuthModel3, AuthModel4,Profile, RequestModel, selectModel} from './authModel';
 import { map,Observable,Subject } from 'rxjs';
 import { Router } from '@angular/router';
 @Injectable({
@@ -79,28 +79,34 @@ export class AuthserviceService {
     }
 
     getSelected_id(){
-      return this.selected_id=localStorage.getItem('senderId');
+      return this.selected_id=localStorage.getItem('selected_id');
      }
 
     friendRequested(stat:string){
-      this.http.put<any>('http://localhost:5500/checkfriendrequest/'+this.selected_id, stat)
+      const selectInfo:selectModel={
+        stat:stat
+      }
+      this.selected_id=localStorage.getItem('selected_id');
+      this.http.put(`http://localhost:5500/friend/${this.selected_id}`, selectInfo)
     }
 
 
     loginUser(username:string,password:string){
         const authData:AuthModel2={username:username,password:password}
         this.http.post<any>('http://localhost:5500/login',authData).subscribe(res=>{
-          this.token=res.token
-          this.user=res.username
+          this.token=res.token,
+          this.user=res.username,
           this.user_id=res.userId
-          console.log(res);
+
+          localStorage.setItem('user',this.user);
+          localStorage.setItem('senderId',this.user_id);
+
           if(this.token){
             this.authenticationSub.next(true);
             this.isAuthenticated=true;
             this.route.navigate(['dashboard']);
           }
-          localStorage.setItem('user',this.user);
-          localStorage.setItem('senderId',this.user_id);
+         
 
         })
         
