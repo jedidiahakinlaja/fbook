@@ -29,7 +29,6 @@ export class NetworkComponent implements OnInit, OnDestroy  {
   ) {
 
     this.authService.getAllUser().pipe(map((response)=>{
-      console.log(response);
       return response;
       
     })).subscribe((res)=>{

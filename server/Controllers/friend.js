@@ -82,6 +82,7 @@ exports.getByReceiverId = (req, res) => {
     const { receiverId } = req.params;
     
     Friend.find({receiverId:receiverId},{})
+        .populate('img','image firstname lastname')
         .then(response => {
             res.status(200).json(response)
         })
