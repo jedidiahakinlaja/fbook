@@ -33,10 +33,10 @@ exports.postRegister = (req, res) => {
 
 
 
-exports.postlogin = async (req, res) => {
+exports.postlogin = (req, res) => {
     const { username, password } = req.body;
     let userFound;
-   await User.findOne({
+    User.findOne({
         username
     })
     .then(user => {
@@ -62,8 +62,9 @@ exports.postlogin = async (req, res) => {
         })
     })
     .catch( err => {
-        res.status(500).json({ 
-            message:'Error with authenication'
+        res.status(401).json({ 
+            message:'Error with authenication',
+            error:err
          })
     })
 }

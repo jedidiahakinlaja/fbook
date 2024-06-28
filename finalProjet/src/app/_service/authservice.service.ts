@@ -39,7 +39,7 @@ export class AuthserviceService {
      this.getuserDetails();
      this.getusr();
      this.getimgid();
-     this.getSelected_id();
+    //  this.getSelected_id();
   }
 
     registerUser(firstname:string, lastname:string, username:string, password:string, email:string, dob:Date, image:string ){
@@ -78,13 +78,13 @@ export class AuthserviceService {
       })
     }
 
-    getSelected_id(){
-      return this.selected_id=localStorage.getItem('senderId');
-     }
+    // getSelected_id(){
+    //   return this.selected_id=localStorage.getItem('senderId');
+    //  }
 
-    friendRequested(stat:string){
-      this.http.put<any>('http://localhost:5500/checkfriendrequest/'+this.selected_id, stat)
-    }
+    // friendRequested(stat:string){
+    //   this.http.put<any>('http://localhost:5500/checkfriendrequest/'+this.selected_id, stat)
+    // }
 
 
     loginUser(username:string,password:string){
@@ -93,7 +93,7 @@ export class AuthserviceService {
           this.token=res.token
           this.user=res.username
           this.user_id=res.userId
-          console.log(res.userId);
+          console.log(res);
           if(this.token){
             this.authenticationSub.next(true);
             this.isAuthenticated=true;
