@@ -86,9 +86,9 @@ export class NetworkComponent implements OnInit, OnDestroy  {
 
      acceptRequest(id:any){
       this.selected_id=id
-      // localStorage.setItem('selected_id',this.selected_id);
-      // this.stat="request accepted";
-      // this.authService.friendRequested(this.stat);
+      localStorage.setItem('selected_id',this.selected_id);
+      this.stat="request accepted";
+      this.authService.friendRequested(this.stat);
      }
 
   logout() {
