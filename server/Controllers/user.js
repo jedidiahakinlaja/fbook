@@ -153,3 +153,29 @@ exports.putImageById = (req, res) => {
             res.status(500).json({ error: err })
         })
 }
+
+exports.putUsers=(req,res)=>{
+    const { id } = req.params;
+    const { firstname, lastname, username, email,  password, dob, image} = req.body;
+    User.updateOne({_id:id},{ $set:{
+
+        firstname,
+        lastname,
+        username,
+        email,
+        password,
+        dob,
+        image
+       }
+    })
+
+    .then(response => {
+        res.status(200).json(response)
+        console.log(id)
+    })
+    .catch(err => {
+        res.status(500).json({ error: err })
+    })
+
+       
+}

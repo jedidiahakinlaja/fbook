@@ -16,29 +16,76 @@
   </header>
 
 
-<div class="container my-5">
-    <table class="table table-bordered table-sm">
-        <thead >
-          <tr>
-            <th>Profile Settings</th>
-            <th>Change Password</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor=" let list of lists">
-            <td>{{list.firstname}}</td>
-            <td>{{list.lastname}}</td>
-          </tr>
-          <tr *ngFor=" let list of lists">
-            <td>Male<input type="text"></td>
-            <td></td>
-          </tr>
-          <tr *ngFor=" let list of lists">
-            <td>July</td>
-            <td>Dooley</td>
-          </tr>
-        </tbody>
-      </table>
-</div>
+
+
+
+<div class="container">
+  <form [formGroup]="myReactiveForm" (ngSubmit)="editStudent()">
+  <div class="card">
+      <div class="card-header bg-success text-white">
+          <h3>Edit Student</h3>
+      </div>
+      <div class="card-body">
+         <div class="form-group">
+          <label for="sName" class="form-label" style="color:black">First Name</label>
+          <input type="text" 
+                 class="form-control" 
+                 formControlName="rsFirstName"
+                 id="sName"
+                 >
+                 <div class="text-danger" *ngIf="myReactiveForm.get('rsFirstName')?.errors?.['required']  ">
+                  FirstName is required!
+                 </div>
+        </div>
+
+        <div class="form-group">
+          <label for="sLastName" class="form-label" style="color:black">Last Name</label>
+          <input type="text" 
+                 class="form-control" 
+                 formControlName="rsLastName"
+                 id="sLastName"
+                 >
+                 <div class="text-danger" *ngIf="myReactiveForm.get('rsLastName')?.errors?.['required']  ">
+                  LastName is required!
+                 </div>
+        </div>
+
+
+        <div class="form-group">
+          <label for="sUserName" class="form-label" style="color:black">UserName</label>
+          <input type="text" 
+                 class="form-control" 
+                 formControlName="rsUserName"
+                 id="sUserName"
+                 >
+                 <div class="text-danger" *ngIf="myReactiveForm.get('rsUserName')?.errors?.['required']  ">
+                  Username is required!
+                 </div>
+        </div>
+
+        <div class="form-group">
+          <label for="sEmail" class="form-label" style="color:black">Email</label>
+          <input type="email" 
+                 class="form-control" 
+                 formControlName="rsEmail"
+                 id="sEmail"
+                 >
+                 <div class="text-danger" *ngIf="myReactiveForm.get('rsEmail')?.errors?.['required']  ">
+                  Email is required!
+                 </div>
+                 
+        </div>
+
+
+        <div style="margin-bottom: 50px;">
+
+        </div>
+        
+            <div class="card-footer">
+          <button type="submit" class="btn btn-success">Edit Student</button>
+            </div>
+      
+      
+  </div>
   
   

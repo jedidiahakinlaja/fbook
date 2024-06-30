@@ -1,4 +1,4 @@
-<header class="header container-fluid border border-success">
+<header class="header container-fluid shadow">
     <div class="row">
         <div class="col-sm-6">
             <div class="float-start">FBOOK</div>
@@ -18,7 +18,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-4 border border-success">
+        <div class=" shadow col-sm-4 ">
             <div class="row border border-danger">
                 <div class="col-sm-12">
                         <div class="userphoto position-relative top-50 start-50 translate-middle">
@@ -31,17 +31,13 @@
             <div class="row border border-danger">
                 <div class="col-sm-12">
                     <p>XXX CONNETION</p>
-                </div>
+                </div> 
             </div>
             <div class="row border border-danger">
                 <div class="col-sm-12">
                     <p>XXX POSITION</p>
                 </div>
             </div>
-            <!-- <form action="http:", method="PUT", enctype="multipart/form-data">
-                <input type="file" name="image">
-                <button type="submit">Upload Profile Image</button>
-            </form> -->
           
             <div>
                 <input type="file" (change)="onFileSelected($event)">
@@ -50,21 +46,23 @@
         </div>
 
         <div class=" offset-sm-2 col-sm-6 border border-success">
-            <div class="row">
+            <form action="" (submit)="postUpload()" >
+                <div class="row">
 
-                <div class=" col-sm-10 form-group">
-                    <input type="text" class="form-control" placeholder="Write new Post/Upload pic">
+                    <div class=" col-sm-10 form-group">
+                        <input type="file" class="form-control" (change)="onFileSelected($event)" placeholder="Write new Post/Upload pic">
+                    </div>
+    
+                    <button type="submit"  class="col-sm-2  btn btn-primary">Post</button>
                 </div>
-
-                <button class="col-sm-2  btn btn-primary">Post</button>
-            </div>
+            </form>
             <div class="row ">
                 <div class="col-sm-12">
                   <div class="filltext">
 
                     <h1>Create Profile</h1>
                     <hr />
-                    <form [formGroup]="form" (submit)="onSubmit()">
+                    <form [formGroup]="form" >
                         <div>
                             <input formControlName="name" type="text" placeholder="Enter name..." />
                         </div>
@@ -76,9 +74,6 @@
                             <button type="submit">Create profile</button>
                         </div>
                     </form>
-                    
-                    <p>{{conso}}</p>
-                    <p>im here</p>
                   </div>
                 </div>
               

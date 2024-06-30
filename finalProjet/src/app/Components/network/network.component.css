@@ -20,3 +20,15 @@
     border: 2px solid red;
     margin-top: 50px;
 }
+
+th{
+    color: white;
+    font-size: 22px;
+    line-height: 50px;
+}
+
+td{
+    color: white;
+    font-size: 22px;
+    line-height: 50px;
+}

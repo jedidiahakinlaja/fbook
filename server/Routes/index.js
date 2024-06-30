@@ -4,13 +4,18 @@ const userController = require("../Controllers/user");
 const imageController = require("../Controllers/image");
 const profilesController = require("../Controllers/img");
 const friendController = require("../Controllers/friend");
+const postPicsController = require("../Controllers/picspost");
 const route = express.Router();
 const storage= require("../Helpers/storage");
 const helps = require("../Helpers/imagehelp")
+
+
+
 route.post('/register', userController.postRegister);
 route.post('/login',userController.postlogin);
 route.post('/upload',imageController.image);
 route.get('/user',userController.getUsers);
+route.patch('/user/:id',userController.putUsers);
 route.get('/users/:usernameId',userController.getUserByUsername);
 route.get('/email/:emailId',userController.getUserByEmail);
 route.get('/user/:id',userController.getUserById);
@@ -21,8 +26,10 @@ route.post('/friendrequest',friendController.friendRegister);
 route.get('/friend',friendController.getFriends);
 route.put('/user/:id', helps, userController.putImageById);
 route.get('/friend/:senderId',friendController.getBySenderId);
-route.put('/friend/:id',friendController.putById);
-// route.put('/friend/:receiverId', friendController.putByReceiverId);
 route.get('/checkfriendrequest/:receiverId', friendController.getByReceiverId);
+route.patch('/friend/:id', friendController.putById);
+route.get('/post',postPicsController.getPics);
+route.post('/post', helps, postPicsController.PostPics);
+route.get('/post/:senderId', postPicsController.getsenderId);
 
 module.exports = route; 

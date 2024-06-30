@@ -71,8 +71,9 @@
                         </thead>
                         <tbody>
                           <tr *ngFor="let nets of requestlists ">
-                            <td>{{nets.img.firstname}}</td>
-                            <td><button class="btn btn-primary" (click)="acceptRequest(nets._id)">Request</button></td>
+                            <td *ngIf="nets.stat!='request accepted'">{{nets.img.firstname}}</td>
+                            <td *ngIf="nets.stat!='request accepted'"><button class="btn btn-primary" (click)="acceptRequest(nets._id)">Request</button></td>
+                            <td *ngIf="nets.stat =='request accepted'">Not Friend Request</td>
                           </tr>
                         </tbody>
                       </table>

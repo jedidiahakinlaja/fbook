@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+    body{
+        background-image: url(./assets/capture.jpg);
+        /* background-repeat: round; */
+        background-size: cover;
+        color: white;
+        /* background-position:50% 50%; */
+        
+    }

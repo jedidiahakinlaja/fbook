@@ -15,12 +15,15 @@ export class AuthserviceService {
   conso: string | any;
   detail: any;
   selected_id:any;
+  lastId:any;
+  edit_id:any;
   private profiles: Profile[] = [];
   private profiles$ = new Subject<Profile[]>();
   private imageId :any;
   private imageId$ = new Subject<Profile[]>();
 
   readonly url = "http://localhost:5500/uploads";
+
   getToken(){
     return this.token
   }
@@ -40,6 +43,8 @@ export class AuthserviceService {
      this.getusr();
      this.getimgid();
      this.getSelected_id();
+     this.getEditId();
+
   }
 
     registerUser(firstname:string, lastname:string, username:string, password:string, email:string, dob:Date, image:string ){
@@ -78,17 +83,7 @@ export class AuthserviceService {
       })
     }
 
-    getSelected_id(){
-      return this.selected_id=localStorage.getItem('selected_id');
-     }
-
-    friendRequested(stat:string){
-      const selectInfo:selectModel={
-        stat:stat
-      }
-      this.selected_id=localStorage.getItem('selected_id');
-      this.http.put(`http://localhost:5500/friend/${this.selected_id}`, selectInfo)
-    }
+    
 
 
     loginUser(username:string,password:string){
@@ -190,15 +185,59 @@ export class AuthserviceService {
       const formData: FormData = new FormData();
       formData.append('image', image, image.name);
       console.log(this.user_id);
-
+      
       return this.http.put('http://localhost:5500/user/'+this.user_id, formData);
     }
+
+    uploadPostImage(image: File):Observable<any>{
+      const formData: FormData = new FormData();
+      formData.append('senderId',this.user_id)
+      formData.append('image', image, image.name);
+      formData.append('postpicId', this.user_id);
+      formData.append('friendId',this.user_id)
+
+      return this.http.post<any>('http://localhost:5500/post', formData);
+    }
+
+    getSelected_id(){
+      console.log(this.selected_id);
+      return this.selected_id=localStorage.getItem('selected_id');
+     }
+
+     friendRequested(stat:any){
+      window.alert(this.selected_id);
+      return this.http.patch<any>('http://localhost:5500/friend/'+this.selected_id, stat).subscribe((res)=>{
+      console.log(res);
+     })
+      
+    }
+
+
+
+
+    getEditId(){
+          return  this.edit_id= localStorage.getItem('edit_id');
+      }
+
+
+    editStudent(stud:any){
+      console.log(this.edit_id);
+      return this.http.patch<any>('http://localhost:5500/user/' +this.edit_id, stud).subscribe((res)=>{
+        console.log(res)
+      })
+    }
+
+   
+
 
 
         logout() {
           // remove user from local storage and set current user to null
           localStorage.removeItem('user');
           localStorage.removeItem('senderId');
+          localStorage.removeItem('selected_id');
+          localStorage.removeItem('lastId');
+          localStorage.removeItem('edit_id');
       }
   
     

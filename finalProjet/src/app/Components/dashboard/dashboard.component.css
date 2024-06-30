@@ -1,16 +1,29 @@
+
+body{
+    color:white;
+    
+}
 .header{
     height:70px;
     padding-bottom:10px;
     padding-top: 10px;
     margin-bottom: 10px;
+    line-height: 25px;
 }
 
 .userphoto{
     height: 132px;
     width: 118px;
     border-radius: 50%;
-    border: 2px solid green;
+    border: 5px solid white;
     margin-top: 0px;
+    line-height: 20px;
+    
+}
+
+.shadow{
+    box-shadow: 10px 15px;
+    border: 5px solid white;
 }
 
 

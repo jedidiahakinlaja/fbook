@@ -53,6 +53,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    return this.conso=localStorage.getItem('user');
   }
 
+  
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
   }
@@ -67,8 +68,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
      }
 
 
-  
-  
+  postUpload():void{
+    if(this.selectedFile){
+      this.authService.uploadPostImage(this.selectedFile).subscribe(
+        response => console.log('Upload successful', response),
+        error => console.error('Upload error', error)
+      );
+    }
+  }
 
   onFileSelect(event: Event) {
     const file = (event.target as HTMLInputElement).files![0];
@@ -88,9 +95,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.form.reset();
     this.imageData = null;
   }
-  onImgSubmit(){
 
-  }
 
   logout() {
     this.authService.logout();
