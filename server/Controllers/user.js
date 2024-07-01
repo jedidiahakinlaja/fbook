@@ -179,3 +179,61 @@ exports.putUsers=(req,res)=>{
 
        
 }
+
+exports.changePassword=(res,req)=>{
+    const{id}=req.params;
+    const{password}=req.body
+    bcrypt.hash(password,10)
+
+    .then(hash=>{
+        User.updateOne({_id:id},{$set:{
+            password:hash
+        }
+
+        })
+        .then(response => {
+            res.status(200).json({
+                message: "Password changed Successfully",
+                passwordchanged: response
+            }) 
+        })
+        .catch( err => {
+            res.status(500).json({ error: err })
+        })   
+    })
+    
+   
+}
+
+
+exports.forgetPassword=(res,req)=>{
+    const { email, dob } = req.body;
+
+    let emailFound;
+    User.findOne({
+        email
+    })
+
+    .then(mail => {
+        if(!mail){
+            return res.status(401).json({
+                message:"email not found"
+            })
+        }
+        emailFound= mail
+        const result = compare(req.body.dob,mail.dob)
+
+        if(!result){
+            return res.status(401).json({
+                message:"dob is incorrect"
+            })
+        }
+        const resetToken = jwt.sign({email:emailFound.email,userId:userFound._id},"secret_string",{expiresIn:"1h"})
+        return res.status(200).json({
+            resetToken:token,
+            email:email,
+            userId:userFound._id
+        })
+    })
+
+}
