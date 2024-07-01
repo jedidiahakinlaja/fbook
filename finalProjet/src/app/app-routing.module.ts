@@ -11,18 +11,19 @@ import { FriendsComponent } from './Components/friends/friends.component';
 import { ChangepasswordComponent } from './Components/changepassword/changepassword.component';
 import { SettingComponent } from './Components/setting/setting.component';
 import { UserComponent } from './Components/user/user.component';
-
+import { AuthGuard } from './guards/auth.guard';
 const routes: Routes = [
-  {path:'header',component:HeaderComponent},
-  {path:'',component:LoginComponent},
+  {path:'', redirectTo:'login', pathMatch:'full'},
+  {path:'register',component:HeaderComponent},
+  {path:'login',component:LoginComponent},
   {path:'resetpassword',component:ResetpasswordComponent},
   {path:'forgetpassword',component:ForgetpasswordComponent},
-  {path:'dashboard',component:DashboardComponent},
-  {path:'network',component:NetworkComponent},
-  {path:'friends',component:FriendsComponent},
+  {path:'dashboard',component:DashboardComponent, canActivate:[AuthGuard]},
+  {path:'network',component:NetworkComponent,canActivate:[AuthGuard]},
+  {path:'friends',component:FriendsComponent, canActivate:[AuthGuard]},
   {path:'changepassword', component:ChangepasswordComponent},
-  {path:'setting',component:SettingComponent},
-  {path:'user',component:UserComponent}
+  {path:'setting',component:SettingComponent,canActivate:[AuthGuard]},
+  {path:'user',component:UserComponent,canActivate:[AuthGuard]}
 ];
 
 @NgModule({

@@ -100,6 +100,7 @@ export class AuthserviceService {
             this.authenticationSub.next(true);
             this.isAuthenticated=true;
             this.route.navigate(['dashboard']);
+            this.isLogeddIn();
           }
          
         })

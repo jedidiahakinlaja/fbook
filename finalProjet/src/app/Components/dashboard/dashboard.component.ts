@@ -19,12 +19,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   imageIdData:any;
   imagesubImage:string|any;
   private imageIdSubcription:Subscription;
+  user:string| any;
 
   constructor(private authService:AuthserviceService,
     private route:Router
   ) {
      this.authService.getuserDetails().subscribe((res)=>{
-      console.log(res);
+      this.user=res;
+      console.log();
     })
        this.authService.getUserbyId();
       this.imageIdSubcription=this.authService.getUserIdStream().subscribe((res)=>{
