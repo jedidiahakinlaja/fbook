@@ -16,6 +16,9 @@ import { ChangepasswordComponent } from './Components/changepassword/changepassw
 import { SettingComponent } from './Components/setting/setting.component';
 import { CommonModule } from '@angular/common';
 import { UserComponent } from './Components/user/user.component';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+
+
 
 
 
@@ -32,16 +35,19 @@ import { UserComponent } from './Components/user/user.component';
     ChangepasswordComponent,
     SettingComponent,
     UserComponent,
+    
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+
   ],
   providers: [
-   {provide:HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true}
+   {provide:HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true},
+   {provide:HTTP_INTERCEPTORS, useClass:TokenInterceptor,multi:true}
   ],
   bootstrap: [AppComponent]
 })

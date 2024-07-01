@@ -24,9 +24,7 @@ export class AuthserviceService {
 
   readonly url = "http://localhost:5500/uploads";
 
-  getToken(){
-    return this.token
-  }
+
   getAuthenticatedSub(){
     return this.authenticationSub.asObservable();
   }
@@ -44,6 +42,7 @@ export class AuthserviceService {
      this.getimgid();
      this.getSelected_id();
      this.getEditId();
+     this.getToken();
 
   }
 
@@ -95,6 +94,7 @@ export class AuthserviceService {
 
           localStorage.setItem('user',this.user);
           localStorage.setItem('senderId',this.user_id);
+          localStorage.setItem('token',this.token);
 
           if(this.token){
             this.authenticationSub.next(true);
@@ -102,10 +102,17 @@ export class AuthserviceService {
             this.route.navigate(['dashboard']);
           }
          
-
         })
         
     } 
+
+    isLogeddIn():boolean{
+      return !!localStorage.getItem('token');
+    }
+  
+    getToken(){ 
+      return localStorage.getItem('token');   
+    }
 
 
     getuserDetails():Observable<any>{
@@ -238,6 +245,7 @@ export class AuthserviceService {
           localStorage.removeItem('selected_id');
           localStorage.removeItem('lastId');
           localStorage.removeItem('edit_id');
+          localStorage.removeItem('token');
       }
   
     
