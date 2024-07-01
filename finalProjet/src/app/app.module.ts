@@ -19,9 +19,6 @@ import { UserComponent } from './Components/user/user.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 
 
-
-
-
 @NgModule({
   declarations: [
     AppComponent,

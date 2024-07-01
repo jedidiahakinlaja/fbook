@@ -32,6 +32,9 @@ route.get('/post',postPicsController.getPics);
 route.post('/post', helps, postPicsController.PostPics);
 route.get('/post/:senderId', postPicsController.getsenderId);
 
+
+// Forget Password
 route.patch('/user/:id', userController.changePassword);
+route.post('/forgetpassword', userController.forgetPassword);
 
 module.exports = route; 

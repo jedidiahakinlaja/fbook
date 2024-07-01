@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
+  forgetForm!: FormGroup;
    myForm: any;
   loginUser: any;
   users: any;
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb:FormBuilder,
     private authService:AuthserviceService,
-    private route:Router
+    private route:Router,
+    private fbs:FormBuilder
   ) {
     
   }
@@ -28,6 +30,11 @@ export class LoginComponent implements OnInit {
       username: new FormControl('', Validators.required),
      password: new FormControl('', [Validators.required, Validators.minLength(4)])
     })
+
+    this.forgetForm=this.fbs.group({
+      email: new FormControl('', Validators.required),
+       dob: new FormControl('', [Validators.required, Validators.minLength(4)])
+    })
   }
 
   
@@ -35,6 +42,15 @@ export class LoginComponent implements OnInit {
     this.authService.loginUser(this.loginForm.value.username,this.loginForm.value.password);
     this.idUser=this.loginForm.value.username;
     this.loginForm.reset();
+  }
+
+  forgetPassword(){
+    let forgetData:any={
+      email:this.forgetForm.value.email,
+      dob:this.forgetForm.value.dob
+    }
+
+    this.authService.forgetUserPassword(forgetData)
   }
 
  

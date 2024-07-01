@@ -12,11 +12,12 @@ import { ChangepasswordComponent } from './Components/changepassword/changepassw
 import { SettingComponent } from './Components/setting/setting.component';
 import { UserComponent } from './Components/user/user.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ResetTokenGuard } from './guards/reset-token.guard';
 const routes: Routes = [
   {path:'', redirectTo:'login', pathMatch:'full'},
   {path:'register',component:HeaderComponent},
   {path:'login',component:LoginComponent},
-  {path:'resetpassword',component:ResetpasswordComponent},
+  {path:'resetpassword',component:ResetpasswordComponent,canActivate:[ ResetTokenGuard]},
   {path:'forgetpassword',component:ForgetpasswordComponent},
   {path:'dashboard',component:DashboardComponent, canActivate:[AuthGuard]},
   {path:'network',component:NetworkComponent,canActivate:[AuthGuard]},

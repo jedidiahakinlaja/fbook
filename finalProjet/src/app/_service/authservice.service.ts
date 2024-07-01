@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 })
 export class AuthserviceService {
   private token!: string;
+  private resetToken!: string;
   private authenticationSub = new Subject<boolean>();
   private isAuthenticated =false;
   user:string | any;
@@ -114,6 +115,27 @@ export class AuthserviceService {
     getToken(){ 
       return localStorage.getItem('token');   
     }
+
+    forgetUserPassword(password:any){
+      return this.http.post<any>('http://localhost:5500/forgetpassword', password).subscribe(res=>{
+        this.resetToken=res.resetToken
+        localStorage.setItem('resetToken',this.resetToken);
+        if(this.resetToken){
+          this.route.navigate(['resetpassword']);
+          this.isLogeddIn();
+        }
+       
+      });
+    }
+
+    isresetToken():boolean{
+      return !!localStorage.getItem('resetToken');
+    }
+  
+    getResetToken(){ 
+      return localStorage.getItem('resetToken');   
+    }
+   
 
 
     getuserDetails():Observable<any>{
@@ -235,9 +257,6 @@ export class AuthserviceService {
       })
     }
 
-   
-
-
 
         logout() {
           // remove user from local storage and set current user to null
@@ -247,6 +266,7 @@ export class AuthserviceService {
           localStorage.removeItem('lastId');
           localStorage.removeItem('edit_id');
           localStorage.removeItem('token');
+          localStorage.removeItem('resetToken');
       }
   
     

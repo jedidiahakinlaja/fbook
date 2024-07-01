@@ -53,7 +53,7 @@ exports.postlogin = (req, res) => {
             })
         }
 
-        const token = jwt.sign({username:userFound.username,userId:userFound._id},"secret_string",{expiresIn:"1h"})
+        const token = jwt.sign({username:userFound.username,userId:userFound._id},"secret_string",{expiresIn:3600})
         return res.status(200).json({
             token:token,
             username:username,
@@ -180,7 +180,7 @@ exports.putUsers=(req,res)=>{
        
 }
 
-exports.changePassword=(res,req)=>{
+exports.changePassword=(req,res)=>{
     const{id}=req.params;
     const{password}=req.body
     bcrypt.hash(password,10)
@@ -206,34 +206,43 @@ exports.changePassword=(res,req)=>{
 }
 
 
-exports.forgetPassword=(res,req)=>{
-    const { email, dob } = req.body;
-
+exports.forgetPassword = (req, res) => {
+    const { email, dob} = req.body;
     let emailFound;
+    let dobFound
     User.findOne({
         email
     })
-
     .then(mail => {
         if(!mail){
             return res.status(401).json({
-                message:"email not found"
+                message:"User not found"
             })
         }
         emailFound= mail
-        const result = compare(req.body.dob,mail.dob)
-
-        if(!result){
-            return res.status(401).json({
-                message:"dob is incorrect"
-            })
-        }
-        const resetToken = jwt.sign({email:emailFound.email,userId:userFound._id},"secret_string",{expiresIn:"1h"})
-        return res.status(200).json({
-            resetToken:token,
-            email:email,
-            userId:userFound._id
+        
+        User.find({
+            dob
         })
+        .then(dobe=>{
+            if(!dobe){
+                return res.status(401).json({
+                    message:"Password is incorrect"
+                })
+            }
+            dobFound= dobe
+            const resetToken = jwt.sign({email:emailFound.email,dob:dobFound.dob},"secret_string",{expiresIn:'1min'})
+            return res.status(200).json({
+                resetToken:resetToken
+            })
+        })
+       
     })
 
+    .catch( err => {
+        return res.status(500).json(
+             {error:err}
+          )
+     })
+    
 }

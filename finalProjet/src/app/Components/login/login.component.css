@@ -1,3 +1,9 @@
-
-
-
+label{
+    color:black;
+}
+.modal-header> h1{
+    color:black;
+}
+h2{
+    color: black;
+}
