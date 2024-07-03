@@ -50,7 +50,9 @@ export class LoginComponent implements OnInit {
       dob:this.forgetForm.value.dob
     }
 
-    this.authService.forgetUserPassword(forgetData)
+    this.authService.forgetUserPassword(forgetData);
+    this.forgetForm.reset();
+    this.authService.logout();
   }
 
  

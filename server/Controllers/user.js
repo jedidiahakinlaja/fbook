@@ -44,22 +44,29 @@ exports.postlogin = (req, res) => {
                 message:"User not found"
             })
         }
-        userFound= user
-        const result =bcrypt.compare(req.body.password,user.password)
+        userFound= user;
 
-        if(!result){
-            return res.status(401).json({
-                message:"Password is incorrect"
+        bcrypt.compare(req.body.password,user.password)
+
+        .then(result=>{
+
+            if(!result){
+                return res.status(401).json({
+                    message:"Password is incorrect"
+                })
+            }
+    
+            const token = jwt.sign({username:userFound.username,userId:userFound._id},"secret_string",{expiresIn:'1m'})
+            return res.status(200).json({
+                token:token,
+                username:username,
+                userId:userFound._id
             })
-        }
-
-        const token = jwt.sign({username:userFound.username,userId:userFound._id},"secret_string",{expiresIn:3600})
-        return res.status(200).json({
-            token:token,
-            username:username,
-            userId:userFound._id
         })
+
     })
+
+      
 
     .catch( err => {
         return res.status(500).json(
@@ -180,14 +187,15 @@ exports.putUsers=(req,res)=>{
        
 }
 
-exports.changePassword=(req,res)=>{
+exports.changePassword= async (req,res)=>{
     const{id}=req.params;
-    const{password}=req.body
-    bcrypt.hash(password,10)
+    
+    const salt= await bcrypt.genSalt(10);
+    const password= await bcrypt.hash(req.body.password, salt);
+    console.log(password)
 
-    .then(hash=>{
-        User.updateOne({_id:id},{$set:{
-            password:hash
+          User.updateOne({_id:id},{$set:{
+            password:password
         }
 
         })
@@ -200,49 +208,48 @@ exports.changePassword=(req,res)=>{
         .catch( err => {
             res.status(500).json({ error: err })
         })   
-    })
-    
-   
+
+       
 }
 
 
 exports.forgetPassword = (req, res) => {
-    const { email, dob} = req.body;
-    let emailFound;
-    let dobFound
+    const { email, dob, username} = req.body;
     User.findOne({
         email
     })
     .then(mail => {
-        if(!mail){
-            return res.status(401).json({
-                message:"User not found"
-            })
-        }
-        emailFound= mail
-        
-        User.find({
-            dob
-        })
-        .then(dobe=>{
-            if(!dobe){
-                return res.status(401).json({
-                    message:"Password is incorrect"
+        if(mail){
+            emailFound= mail;
+            if(mail.dob==dob){
+                const resetToken = jwt.sign({email:emailFound.email,resetId:emailFound._id},"secret_string",{expiresIn:'1m'})
+                const istoken= jwt.verify(resetToken,"secret_string", (err,res)=>{
+                    if(err){ 
+    
+                       return "token expired"
+                    }
+                    
+                });
+    
+                if(istoken=="token expired"){
+                    return res.status(401).json({message:'token expired'})
+                }
+                
+                return res.status(200).json({
+                    resetToken:resetToken,
+                    email:email,
+                    resetId:emailFound._id
                 })
             }
-            dobFound= dobe
-            const resetToken = jwt.sign({email:emailFound.email,dob:dobFound.dob},"secret_string",{expiresIn:'1min'})
-            return res.status(200).json({
-                resetToken:resetToken
-            })
+            
+        }
+           
+        return res.status(401).json({
+            message:"User not found"
         })
+
+    
        
     })
-
-    .catch( err => {
-        return res.status(500).json(
-             {error:err}
-          )
-     })
     
 }

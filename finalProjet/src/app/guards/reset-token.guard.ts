@@ -18,7 +18,9 @@ export class ResetTokenGuard implements CanActivate {
       if(this.authService.isresetToken()){
         return true;
       }
-        window.alert('please login first!!');
+       
+        window.alert('please login first from can!!');
+        localStorage.removeItem('resetToken');
         this.router.navigate(['login']);
         return false;
       

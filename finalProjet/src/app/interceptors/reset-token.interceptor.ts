@@ -4,7 +4,8 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpErrorResponse
+  HttpErrorResponse,
+  HttpHeaders
 } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { AuthserviceService } from '../_service/authservice.service';
@@ -17,23 +18,33 @@ export class ResetTokenInterceptor implements HttpInterceptor {
     private router:Router) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const myresetToken =this.authService.getResetToken()
+ 
 
+    const myresetToken =this.authService.getResetToken();
+
+    const istoken = this.authService.setResetToken();
+    console.log(myresetToken);
+   
     if(myresetToken){
+      console.log(myresetToken)
       request = request.clone({
-        setHeaders:{Authorization:`Bearer ${myresetToken}`}
+        setHeaders: {Authorization:`Bearer ${myresetToken}`}
       })
     }
 
     return next.handle(request).pipe(
       catchError((err:any)=>{
-        if(err instanceof HttpErrorResponse){
-          if(err.status===401){
+       
+          if(istoken==true){
+            this.authService.deleteResetToken()
             this.router.navigate(['login'])
-            window.alert('token expired login again')
+            window.alert('refresh token expired login again')
           }
-        }
+ 
         return throwError(()=>new Error("some other error occurred"))
       })
-    );  }
+
+    ); 
+
+  }
 }

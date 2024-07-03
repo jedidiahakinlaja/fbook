@@ -26,7 +26,7 @@ const userSchema = new Schema({
         required: true
     },
     dob:{
-        type:Date
+        type:String
     },
     image:{
         type:String

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NG_VALIDATORS, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './Components/header/header.component';
@@ -17,6 +17,10 @@ import { SettingComponent } from './Components/setting/setting.component';
 import { CommonModule } from '@angular/common';
 import { UserComponent } from './Components/user/user.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { ResetTokenInterceptor } from './interceptors/reset-token.interceptor';
+import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
+import { CheckPasswordDirective } from './directive/password.directive';
+
 
 
 @NgModule({
@@ -32,6 +36,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     ChangepasswordComponent,
     SettingComponent,
     UserComponent,
+    CheckPasswordDirective
     
   ],
   imports: [
@@ -40,11 +45,14 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     AppRoutingModule,
     HttpClientModule,
     CommonModule,
-
+    FormsModule
   ],
   providers: [
    {provide:HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true},
-   {provide:HTTP_INTERCEPTORS, useClass:TokenInterceptor,multi:true}
+   {provide:HTTP_INTERCEPTORS, useClass:TokenInterceptor,multi:true},
+   {provide:HTTP_INTERCEPTORS, useClass:ResetTokenInterceptor, multi:true},
+   { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+        JwtHelperService
   ],
   bootstrap: [AppComponent]
 })

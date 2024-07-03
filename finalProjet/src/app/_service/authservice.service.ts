@@ -1,16 +1,22 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http'
 import { AuthModel, AuthModel2, AuthModel3, AuthModel4,Profile, RequestModel, selectModel} from './authModel';
-import { map,Observable,Subject } from 'rxjs';
+import { BehaviorSubject, map,Observable,Subject, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthserviceService {
-  private token!: string;
-  private resetToken!: string;
+  token: string | any;
+  resetToken: string | any;
+  resetTokensent : string | any;
+  resetId :string | any;
   private authenticationSub = new Subject<boolean>();
   private isAuthenticated =false;
+  private ResetTokenObj = new Subject<boolean>();
+  private isResetTokenSub = false;
+
   user:string | any;
   user_id:string |any;
   conso: string | any;
@@ -22,9 +28,15 @@ export class AuthserviceService {
   private profiles$ = new Subject<Profile[]>();
   private imageId :any;
   private imageId$ = new Subject<Profile[]>();
-
   readonly url = "http://localhost:5500/uploads";
 
+  setResetToken(){
+    return this.isResetTokenSub;
+  } 
+
+  getResetTokenObj(){
+    return this.ResetTokenObj.asObservable();
+  }
 
   getAuthenticatedSub(){
     return this.authenticationSub.asObservable();
@@ -36,7 +48,8 @@ export class AuthserviceService {
   }
   constructor(
     private http:HttpClient,
-    private route:Router
+    private route:Router,
+    private jwtHelper: JwtHelperService
   ) { 
      this.getuserDetails();
      this.getusr();
@@ -44,8 +57,11 @@ export class AuthserviceService {
      this.getSelected_id();
      this.getEditId();
      this.getToken();
+     this.getResetToken();
+     this.getResetId();
 
   }
+
 
     registerUser(firstname:string, lastname:string, username:string, password:string, email:string, dob:Date, image:string ){
       const authModel:AuthModel={
@@ -117,25 +133,62 @@ export class AuthserviceService {
     }
 
     forgetUserPassword(password:any){
-      return this.http.post<any>('http://localhost:5500/forgetpassword', password).subscribe(res=>{
-        this.resetToken=res.resetToken
-        localStorage.setItem('resetToken',this.resetToken);
-        if(this.resetToken){
-          this.route.navigate(['resetpassword']);
-          this.isLogeddIn();
+      return this.http.post<any>('http://localhost:5500/forgetpassword', password)
+      .subscribe(
+        res=>{
+          this.resetToken = res.resetToken,
+          this.resetId= res.resetId
+
+          localStorage.setItem('resetId',this.resetId);
+          localStorage.setItem('resetToken', this.resetToken);
+          if (this.resetToken) {
+            this.route.navigate(['resetpassword']);
+            this.isresetToken();    
+            this.ResetTokenObj.next(true);
+            this.isResetTokenSub=true;
+          };
+        },
+
+        error=>{
+          console.error('reset Token', error);
+          return throwError({ status: 401 });
         }
-       
-      });
+      ) 
+
+        
     }
+      
 
     isresetToken():boolean{
-      return !!localStorage.getItem('resetToken');
+      const resetToken = localStorage.getItem('resetToken');
+      return !this.jwtHelper.isTokenExpired(resetToken);
     }
+
+
   
     getResetToken(){ 
-      return localStorage.getItem('resetToken');   
+      console.log(this.resetTokensent);
+       const resetTokensent =localStorage.getItem('resetToken'); 
+      return resetTokensent  
     }
    
+    getResetId(){
+      return this.resetId=localStorage.getItem('resetId')
+    }
+
+
+
+
+    // Change password
+
+    changePassword(changep:any){
+      console.log(changep);
+      return this.http.patch<any>('http://localhost:5500/userchange/'+this.resetId,changep).subscribe((res)=>{
+        console.log(res);
+       })
+
+    }
+
 
 
     getuserDetails():Observable<any>{
@@ -225,7 +278,6 @@ export class AuthserviceService {
       formData.append('image', image, image.name);
       formData.append('postpicId', this.user_id);
       formData.append('friendId',this.user_id)
-
       return this.http.post<any>('http://localhost:5500/post', formData);
     }
 
@@ -257,6 +309,10 @@ export class AuthserviceService {
       })
     }
 
+    deleteResetToken(){
+      return localStorage.removeItem('resetToken');
+    }
+
 
         logout() {
           // remove user from local storage and set current user to null
@@ -267,6 +323,8 @@ export class AuthserviceService {
           localStorage.removeItem('edit_id');
           localStorage.removeItem('token');
           localStorage.removeItem('resetToken');
+          localStorage.removeItem('resetId');
+          
       }
   
     
