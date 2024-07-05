@@ -26,16 +26,17 @@ export class TokenInterceptor implements HttpInterceptor {
       })
     }
 
-    return next.handle(request).pipe(
-      catchError((err:any)=>{
-        if(err instanceof HttpErrorResponse){
-          if(err.status===401){
-            this.router.navigate(['login'])
-            window.alert('token expired login again')
-          }
-        }
-        return throwError(()=>new Error("some other error occurred"))
-      })
-    );
+    return next.handle(request)
+    // .pipe(
+    //   catchError((err:any)=>{
+    //     if(err instanceof HttpErrorResponse){
+    //       if(err.status===401){
+    //         this.router.navigate(['login'])
+    //         window.alert('token expired login again')
+    //       }
+    //     }
+    //     return throwError(()=>new Error("some other error occurred"))
+    //   })
+    // );
   }
 }

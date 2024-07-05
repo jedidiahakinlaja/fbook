@@ -32,19 +32,20 @@ export class ResetTokenInterceptor implements HttpInterceptor {
       })
     }
 
-    return next.handle(request).pipe(
-      catchError((err:any)=>{
+    return next.handle(request)
+    // .pipe(
+    //   catchError((err:any)=>{
        
-          if(istoken==true){
-            this.authService.deleteResetToken()
-            this.router.navigate(['login'])
-            window.alert('refresh token expired login again')
-          }
+    //       if(istoken==true){
+    //         this.authService.deleteResetToken()
+    //         this.router.navigate(['login'])
+    //         window.alert('refresh token expired login again')
+    //       }
  
-        return throwError(()=>new Error("some other error occurred"))
-      })
+    //     return throwError(()=>new Error("some other error occurred"))
+    //   })
 
-    ); 
+    // ); 
 
   }
 }

@@ -5,7 +5,7 @@
         </div>
         <div class="col-sm-6">
             <div class="float-end">
-                <button class="float-start mx-2" routerLinkActive="active" routerLink="/header" >Home</button>
+                <button class="float-start mx-2" routerLinkActive="active" routerLink="/dashboard" >Home</button>
                 <button class="float-start mx-2" routerLinkActive="active" routerLink="/network">Network</button>
                 <button class="float-start mx-2" routerLinkActive="active" routerLink="/friends" >Friends</button>
                 <button class="float-start mx-2" routerLinkActive="active" routerLink="/setting">Settings</button>
@@ -39,15 +39,20 @@
         </div>
 
         <div class=" offset-sm-2 col-sm-6 border border-success">
-           <div class="border border-success my-3">
-                 <p>Tobi is here</p>
-           </div>
-            <div class="border border-success my-3">
-                 <p>Hi here</p>
-           </div>
-            <div class="border border-success my-3">
-                 <p>Hi here</p>
-           </div>
+            <p  style="text-align: center;">Friend Request Sent</p>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let nets of filterFriendlist ">
+                    <td>{{nets.img.firstname}}</td>
+                  </tr>
+                </tbody>
+              </table>
         </div>
     </div>
 </div>

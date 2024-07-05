@@ -28,8 +28,8 @@ exports.PostPics =async (req, res) => {
 exports.getPics= async (req, res) => {
     await PicsPost.find()
     .select()
-    .populate('postpicId','image firstname lastname')
-    .populate('friendId','stat')
+    .populate('postpicId','image firstname lastname stat')
+    .populate('friendId','receiverId stat img')
     .exec()
      .then((data) => {
          res.json(data);

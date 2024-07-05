@@ -4,6 +4,7 @@ import { AuthModel, AuthModel2, AuthModel3, AuthModel4,Profile, RequestModel, se
 import { BehaviorSubject, map,Observable,Subject, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Conditional } from '@angular/compiler';
 @Injectable({
   providedIn: 'root'
 })
@@ -63,7 +64,7 @@ export class AuthserviceService {
   }
 
 
-    registerUser(firstname:string, lastname:string, username:string, password:string, email:string, dob:Date, image:string ){
+    registerUser(firstname:string, lastname:string, username:string, password:string, email:string, dob:Date, image:string, imagePost:string ){
       const authModel:AuthModel={
         firstname: firstname,
         lastname: lastname,
@@ -71,7 +72,8 @@ export class AuthserviceService {
         password: password,
         email: email,
         dob:dob,
-        image:image
+        image:image,
+        imagePost:imagePost
       }
         this.http.post('http://localhost:5500/register',authModel).subscribe(res=>{
           console.log(res);
@@ -86,6 +88,9 @@ export class AuthserviceService {
     }
    
 
+
+    //  Send friend request
+
     sendRequest(senderId:string, receiverId:string, stat:string, img:string){
       const requestModel:RequestModel={
         senderId:senderId,
@@ -99,6 +104,15 @@ export class AuthserviceService {
       })
     }
 
+    
+
+
+
+
+
+    getFriend():Observable<any>{
+      return this.http.get<any>('http://localhost:5500/friend/'+this.user_id)
+    }
     
 
 
@@ -274,11 +288,8 @@ export class AuthserviceService {
 
     uploadPostImage(image: File):Observable<any>{
       const formData: FormData = new FormData();
-      formData.append('senderId',this.user_id)
       formData.append('image', image, image.name);
-      formData.append('postpicId', this.user_id);
-      formData.append('friendId',this.user_id)
-      return this.http.post<any>('http://localhost:5500/post', formData);
+      return this.http.patch<any>('http://localhost:5500/imagepost/'+this.user_id, formData);
     }
 
     getSelected_id(){
@@ -286,14 +297,34 @@ export class AuthserviceService {
       return this.selected_id=localStorage.getItem('selected_id');
      }
 
-     friendRequested(stat:any){
-      window.alert(this.selected_id);
-      return this.http.patch<any>('http://localhost:5500/friend/'+this.selected_id, stat).subscribe((res)=>{
-      console.log(res);
-     })
+
+
+      /// accept friend Request
+
+     friendRequested(send:any, stat:any){
+      window.alert(send);
+      this.http.patch<any>('http://localhost:5500/friend/'+send, stat).subscribe(res=>{
+        this.reacceptedRequest(); 
+        console.log(res);
+      })
       
     }
 
+
+    reacceptedRequest(){
+      window.alert("reaccapt was called")
+     const requestModel:any={
+      senderId:this.user_id,
+      receiverId:localStorage.getItem('resendSender'),
+      stat:"request accepted",
+      img:localStorage.getItem('resendSender')
+      }
+      console.log(requestModel);
+      this.http.post('http://localhost:5500/friendrequests',requestModel).subscribe(res=>{
+        console.log(res);
+      })
+      
+    }
 
 
 
@@ -324,6 +355,7 @@ export class AuthserviceService {
           localStorage.removeItem('token');
           localStorage.removeItem('resetToken');
           localStorage.removeItem('resetId');
+          localStorage.removeItem('resendSender')
           
       }
   

@@ -3,8 +3,8 @@ const Friend = require('../Models/friendModel');
 exports.friendRegister =async (req, res) => {
 
         const { senderId, receiverId, stat, img } = req.body;
-
-        const friendObj = new Friend ({
+            console.log('resent')
+        const friendObj =  Friend ({
             senderId, 
             receiverId,
             stat,
@@ -25,10 +25,38 @@ exports.friendRegister =async (req, res) => {
 }
 
 
+
+exports.newFriend =async (req, res) => {
+
+    const   { senderId, receiverId, stat, img } = req.body;
+    console.log("sent2");
+    const friendObj = new Friend ({
+        senderId, 
+        receiverId,
+        stat,
+        img
+    });
+
+   await friendObj.save()
+    .then(response => {
+         
+        res.status(200).json({
+            message: "Friend Request Saved Successfully",
+            friendrequest: response
+        }) 
+    })
+    .catch( err => {
+        res.status(500).json({ error: err })
+    })
+
+}
+
+
+
 exports.getFriends= async (req, res) => {
     await Friend.find()
     .select()
-    .populate('img','image firstname lastname')
+    .populate('img','image firstname lastname stat, imagePost')
     .exec()
      .then((data) => {
          res.json(data);
@@ -46,11 +74,9 @@ exports.getFriends= async (req, res) => {
     const updatedMovies = req.body
     
     Friend.find({senderId:senderId},{})
+    .populate('img','image firstname lastname')
         .then(response => {
-            res.status(200).json({
-                message: "Request Successfully Acccepted",
-                restaurants: response
-            })
+            res.status(200).json(response)
         })
         .catch(err => {
             res.status(500).json({ error: err })

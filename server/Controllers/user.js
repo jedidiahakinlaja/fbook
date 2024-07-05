@@ -2,7 +2,7 @@ const User = require('../Models/userModel');
 const bcrypt =require('bcrypt');
 const jwt = require('jsonwebtoken');
 exports.postRegister = (req, res) => {
-    const { firstname, lastname, username, email,  password, dob, image } = req.body;
+    const { firstname, lastname, username, email,  password, dob, image, imagePost } = req.body;
     bcrypt.hash(password,10)
       .then(hash=>{
         const userObj = new User ({
@@ -12,7 +12,8 @@ exports.postRegister = (req, res) => {
             email,
             dob,
            password:hash,
-           image
+           image,
+           imagePost
         });
  
         userObj.save()
@@ -252,4 +253,24 @@ exports.forgetPassword = (req, res) => {
        
     })
     
+}
+
+
+exports.putImagePostById = (req, res) => {
+
+
+    const { id } = req.params;
+  
+    
+     User.updateOne({_id:id},{ $set:{
+
+        imagePost:'http://localhost:5500/img/'+ req.file.filename
+       }
+    })
+        .then(response => {
+            res.status(200).json(response)
+        })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        })
 }
