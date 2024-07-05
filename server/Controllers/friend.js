@@ -71,10 +71,9 @@ exports.getFriends= async (req, res) => {
 
 
     const { senderId } = req.params;
-    const updatedMovies = req.body
     
     Friend.find({senderId:senderId},{})
-    .populate('img','image firstname lastname')
+    .populate('img','image firstname lastname imagePost')
         .then(response => {
             res.status(200).json(response)
         })

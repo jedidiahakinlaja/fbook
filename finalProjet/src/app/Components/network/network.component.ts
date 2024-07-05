@@ -75,6 +75,7 @@ export class NetworkComponent implements OnInit, OnDestroy  {
      ngOnDestroy(){
       this.imageIdSubcription.unsubscribe();
      }
+
      
      getUserId(){
        this.senderId= localStorage.getItem('senderId');

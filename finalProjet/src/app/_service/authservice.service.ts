@@ -325,6 +325,16 @@ export class AuthserviceService {
       })
       
     }
+    
+
+    // View post from friend
+
+    viewPostfromFriend():Observable<any>{
+      return this.http.get<any>('http://localhost:5500/friend/'+this.user_id)
+    }
+
+
+
 
 
 
@@ -333,7 +343,7 @@ export class AuthserviceService {
       }
 
 
-    editStudent(stud:any){
+    editSetting(stud:any){
       console.log(this.edit_id);
       return this.http.patch<any>('http://localhost:5500/user/' +this.edit_id, stud).subscribe((res)=>{
         console.log(res)

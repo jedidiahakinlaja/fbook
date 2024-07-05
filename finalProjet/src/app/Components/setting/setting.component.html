@@ -20,10 +20,10 @@
 
 
 <div class="container">
-  <form [formGroup]="myReactiveForm" (ngSubmit)="editStudent()">
+  <form [formGroup]="myReactiveForm" (ngSubmit)="editSetting()">
   <div class="card">
       <div class="card-header bg-success text-white">
-          <h3>Edit Student</h3>
+          <h3>Settings</h3>
       </div>
       <div class="card-body">
          <div class="form-group">
@@ -87,5 +87,45 @@
       
       
   </div>
+
+  <div class="container">
+    <form [formGroup]="resetForm" (ngSubmit)="resetPasswordForm()" appCheckPassword class="border border-primary mt-2 py-2 px-2">
+    <div class="card">
+      <div class="card-header bg-success text-black">
+        <h3>Change Password</h3>
+    </div>
+      <h2 class="text-center my-2">Reset Password</h2>
+      <div class="form-group my-3">
+          <label for="password">New Password</label>
+          <input type="password" formControlName="password" class="form-control">
+          <div class="text-danger" *ngIf="resetForm.get('password')?.invalid && resetForm.get('password')?.touched"> Password must be at last 4 characters</div>
+      </div>
+  
+      <div class="form-group my-3">
+          <label for="confirmPassword">Confirm Password:</label>
+          <input type="confirmpassword" formControlName="confirmpassword" class="form-control">    
+          <div *ngIf="resetForm.get('password')?.invalid && (resetForm.get('password')?.dirty || resetForm.get('password')?.touched)" class="text-danger">
+              Please confirm your password.
+          </div>
+          <div *ngIf="resetForm.errors?.['passwordCheck'] || (resetForm.get('confirm')?.invalid && resetForm.get('confirm')?.touched)"
+              class="text-danger">
+              Passwords do not match.
+          </div>
+      </div>
+  
+          <div style="margin-bottom: 30px;">
+  
+          </div>
+          
+              <div class="card-footer">
+                <button type="submit" [disabled]="resetForm.invalid" class="btn btn-primary">RESET
+                </button>
+              </div>
+        
+        
+    </div>
+     
+    </form>
+      </div>
   
   

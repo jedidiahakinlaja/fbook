@@ -20,7 +20,7 @@
 <div class="container">
     <div class="row">
         <div class=" shadow col-sm-4 ">
-            <div class="row border border-danger">
+            <div class="row border border-white">
                 <div class="col-sm-12">
                         <div class="userphoto position-relative top-50 start-50 translate-middle">
                             <div *ngIf="imagesubImage">
@@ -29,12 +29,12 @@
                         </div>
                     </div>
             </div>
-            <div class="row border border-danger">
+            <div class="row border border-white">
                 <div class="col-sm-12">
                     <p>XXX CONNETION</p>
                 </div> 
             </div>
-            <div class="row border border-danger">
+            <div class="row border border-white">
                 <div class="col-sm-12">
                     <p>XXX POSITION</p>
                 </div>
@@ -46,7 +46,7 @@
               </div>
         </div>
 
-        <div class=" offset-sm-2 col-sm-6 border border-success">
+        <div class=" offset-sm-2 col-sm-6 border border-white">
             <form action="" (submit)="postUpload()" >
                 <div class="row">
 
@@ -60,21 +60,14 @@
             <div class="row ">
                 <div class="col-sm-12">
                   <div class="filltext">
-
-                    <h1>Create Profile</h1>
-                    <hr />
-                    <form [formGroup]="form" >
-                        <div>
-                            <input formControlName="name" type="text" placeholder="Enter name..." />
-                        </div>
-                        <div>
-                            <input type="file" (change)="onFileSelect($event)" />
-                        </div>
-                        
-                        <div>
-                            <button type="submit">Create profile</button>
-                        </div>
-                    </form>
+                    <div *ngFor="let imgpost of postfromfriendfilter"  style="margin-bottom: 10px;">
+                        <img src="{{imgpost.img.imagePost}}" *ngIf="imgpost.img.imagePost!=''" style="width:100%; height:300px;" alt="">
+                    </div>
+                    <!-- Send post -->
+                    <!-- FriendPost -->
+                    <div *ngFor="let imgpost of postfromfriendfilter">
+                        <img src="{{imgpost.img.imagePost}}" *ngIf="imgpost.img.imagePost!=''" style="width:100%; height:300px;" alt="">
+                    </div>
                   </div>
                 </div>
               

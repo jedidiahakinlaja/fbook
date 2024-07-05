@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, map } from 'rxjs';
 import { AuthserviceService } from 'src/app/_service/authservice.service';
@@ -8,13 +8,24 @@ import { AuthserviceService } from 'src/app/_service/authservice.service';
   templateUrl: './friends.component.html',
   styleUrls: ['./friends.component.css']
 })
-export class FriendsComponent implements OnInit {
+export class FriendsComponent implements OnInit, OnDestroy {
 
   friendlist:any
 
   filterFriendlist:any;
 
+  imageData: string | any;
+  imageIdData:any;
+  imagesubImage:string|any;
+  img:any;
+  user:string| any;
+  postfromfriend:any; 
+  postfromfriendfilter:any;
+
+  private imageIdSubcription:any;
+
   constructor(private authService:AuthserviceService, private route:Router) { }
+ 
 
   ngOnInit(): void {
 
@@ -26,7 +37,22 @@ export class FriendsComponent implements OnInit {
           return record.stat = "request accepted";
         })
     })
+
+      this.authService.getUserbyId();
+      this.imageIdSubcription=this.authService.getUserIdStream().subscribe((res)=>{
+      console.log(res);
+      this.imageIdData=res;
+      this.imagesubImage=this.imageIdData.image
+      console.log(this.imagesubImage)
+    })
+
   }
+
+  ngOnDestroy(){
+    this.imageIdSubcription.unsubscribe();
+   }
+
+ 
 
   logout() {
     this.authService.logout();

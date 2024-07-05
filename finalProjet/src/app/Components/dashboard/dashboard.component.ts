@@ -20,6 +20,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   imagesubImage:string|any;
   private imageIdSubcription:Subscription;
   user:string| any;
+  postfromfriend:any; 
+  postfromfriendfilter:any;
+
 
   constructor(private authService:AuthserviceService,
     private route:Router
@@ -27,6 +30,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
      this.authService.getuserDetails().subscribe((res)=>{
       this.user=res;
       console.log();
+    })
+
+    this.authService.viewPostfromFriend().subscribe((res)=>{
+      this.postfromfriend=res;
+      this.postfromfriendfilter= this.postfromfriend.filter(function(result:any){
+        return result.stat='request accepted'
+      })
+      console.log(this.postfromfriendfilter);
     })
        this.authService.getUserbyId();
       this.imageIdSubcription=this.authService.getUserIdStream().subscribe((res)=>{
@@ -36,6 +47,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       console.log(this.imagesubImage)
     })
      
+    
 
    }
 

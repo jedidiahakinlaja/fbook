@@ -29,7 +29,7 @@ body{
 
 
 .filltext{
-    height:200px;
-    border: 2px solid red;
+    height:auto;
+    border: 2px solid white;
     margin-top: 50px;
 }

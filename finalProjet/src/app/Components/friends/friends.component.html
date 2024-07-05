@@ -18,11 +18,13 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-4 border border-success">
+        <div class="  offset-sm-1 col-sm-3 border border-success">
             <div class="row border border-danger">
                 <div class="col-sm-12">
                         <div class="userphoto position-relative top-50 start-50 translate-middle">
-                            <img src="" alt="not found">
+                            <div *ngIf="imagesubImage">
+                                <img [src]="imagesubImage" class="img-fluid img-thumbnail" style="width: 200px; height:140px; border-radius: 50%;" />
+                            </div>
                         </div>
                     </div>
             </div>
