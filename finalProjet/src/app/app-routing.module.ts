@@ -13,6 +13,7 @@ import { SettingComponent } from './Components/setting/setting.component';
 import { UserComponent } from './Components/user/user.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ResetTokenGuard } from './guards/reset-token.guard';
+import { AdminGuard } from './guards/admin.guard';
 const routes: Routes = [
   {path:'', redirectTo:'login', pathMatch:'full'},
   {path:'register',component:HeaderComponent},
@@ -24,7 +25,7 @@ const routes: Routes = [
   {path:'friends',component:FriendsComponent, canActivate:[AuthGuard]},
   {path:'changepassword', component:ChangepasswordComponent},
   {path:'setting',component:SettingComponent,canActivate:[AuthGuard]},
-  {path:'user',component:UserComponent,canActivate:[AuthGuard]}
+  {path:'user',component:UserComponent,canActivate:[AdminGuard]}
 ];
 
 @NgModule({

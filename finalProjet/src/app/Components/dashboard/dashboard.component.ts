@@ -22,11 +22,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   user:string| any;
   postfromfriend:any; 
   postfromfriendfilter:any;
-
+  role:any;
 
   constructor(private authService:AuthserviceService,
     private route:Router
-  ) {
+  ) { 
+     this.role=localStorage.getItem('role');
      this.authService.getuserDetails().subscribe((res)=>{
       this.user=res;
       console.log();

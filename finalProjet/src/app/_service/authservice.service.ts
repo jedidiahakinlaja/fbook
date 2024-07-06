@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {HttpClient} from '@angular/common/http'
 import { AuthModel, AuthModel2, AuthModel3, AuthModel4,Profile, RequestModel, selectModel} from './authModel';
 import { BehaviorSubject, map,Observable,Subject, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Conditional } from '@angular/compiler';
+import { NgToastService } from 'ng-angular-popup';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,10 +18,10 @@ export class AuthserviceService {
   private authenticationSub = new Subject<boolean>();
   private isAuthenticated =false;
   private ResetTokenObj = new Subject<boolean>();
-  private isResetTokenSub = false;
-
+  private isResetTokenSub = false; 
   user:string | any;
   user_id:string |any;
+  user_role:string| any;
   conso: string | any;
   detail: any;
   selected_id:any;
@@ -30,6 +32,7 @@ export class AuthserviceService {
   private imageId :any;
   private imageId$ = new Subject<Profile[]>();
   readonly url = "http://localhost:5500/uploads";
+
 
   setResetToken(){
     return this.isResetTokenSub;
@@ -50,7 +53,8 @@ export class AuthserviceService {
   constructor(
     private http:HttpClient,
     private route:Router,
-    private jwtHelper: JwtHelperService
+    private jwtHelper: JwtHelperService,
+    private toast:NgToastService
   ) { 
      this.getuserDetails();
      this.getusr();
@@ -60,11 +64,12 @@ export class AuthserviceService {
      this.getToken();
      this.getResetToken();
      this.getResetId();
+     this.getRole();
 
   }
 
 
-    registerUser(firstname:string, lastname:string, username:string, password:string, email:string, dob:Date, image:string, imagePost:string ){
+    registerUser(firstname:string, lastname:string, username:string, password:string, email:string, dob:Date, image:string, imagePost:string, role:string ){
       const authModel:AuthModel={
         firstname: firstname,
         lastname: lastname,
@@ -73,11 +78,21 @@ export class AuthserviceService {
         email: email,
         dob:dob,
         image:image,
-        imagePost:imagePost
+        imagePost:imagePost,
+        role:role
       }
-        this.http.post('http://localhost:5500/register',authModel).subscribe(res=>{
+        this.http.post('http://localhost:5500/register',authModel).subscribe(
+          (res=>{
           console.log(res);
+          window.alert("user registered successfully")
+          this.route.navigate(['login']);
+        }),
+        (err=>{
+          window.alert("error occured, email has be used already. Pls register again.")
+          this.route.navigate(['header']);
+          console.log(err)
         })
+      )
     }
 
     getusr(){
@@ -99,16 +114,18 @@ export class AuthserviceService {
         img:img
       }
 
-      this.http.post('http://localhost:5500/friendrequest',requestModel).subscribe(res=>{
+      this.http.post('http://localhost:5500/friendrequest',requestModel).subscribe(
+        (res=>{
         console.log(res);
-      })
+        window.alert("friend request sent successfuly");
+      }),
+       (err=>{
+        window.alert("error ocurred, try again")
+       })
+    )
     }
 
-    
-
-
-
-
+  
 
     getFriend():Observable<any>{
       return this.http.get<any>('http://localhost:5500/friend/'+this.user_id)
@@ -118,23 +135,32 @@ export class AuthserviceService {
 
     loginUser(username:string,password:string){
         const authData:AuthModel2={username:username,password:password}
-        this.http.post<any>('http://localhost:5500/login',authData).subscribe(res=>{
+        this.http.post<any>('http://localhost:5500/login',authData).subscribe(
+          (res=>{
           this.token=res.token,
           this.user=res.username,
-          this.user_id=res.userId
-
+          this.user_id=res.userId,
+          this.user_role=res.role
           localStorage.setItem('user',this.user);
           localStorage.setItem('senderId',this.user_id);
+          localStorage.setItem('role',this.user_role);
           localStorage.setItem('token',this.token);
+
 
           if(this.token){
             this.authenticationSub.next(true);
             this.isAuthenticated=true;
+            this.toast.success("This is new error Success", "SUCCESS", 5000);
+            window.alert('login successful')
             this.route.navigate(['dashboard']);
             this.isLogeddIn();
           }
          
-        })
+        }),
+        err=>{
+          window.alert('wrong credentials, try again')
+        }
+      )
         
     } 
 
@@ -146,13 +172,19 @@ export class AuthserviceService {
       return localStorage.getItem('token');   
     }
 
+    getRole(){
+      return localStorage.getItem('role'); 
+    }
+
+
+
     forgetUserPassword(password:any){
       return this.http.post<any>('http://localhost:5500/forgetpassword', password)
       .subscribe(
         res=>{
           this.resetToken = res.resetToken,
           this.resetId= res.resetId
-
+          window.alert('credential correct')
           localStorage.setItem('resetId',this.resetId);
           localStorage.setItem('resetToken', this.resetToken);
           if (this.resetToken) {
@@ -164,8 +196,7 @@ export class AuthserviceService {
         },
 
         error=>{
-          console.error('reset Token', error);
-          return throwError({ status: 401 });
+          window.alert("wrong credential")
         }
       ) 
 
@@ -177,7 +208,6 @@ export class AuthserviceService {
       const resetToken = localStorage.getItem('resetToken');
       return !this.jwtHelper.isTokenExpired(resetToken);
     }
-
 
   
     getResetToken(){ 
@@ -196,10 +226,26 @@ export class AuthserviceService {
     // Change password
 
     changePassword(changep:any){
-      console.log(changep);
-      return this.http.patch<any>('http://localhost:5500/userchange/'+this.resetId,changep).subscribe((res)=>{
-        console.log(res);
-       })
+      return this.http.patch<any>('http://localhost:5500/userchange/'+this.resetId,changep).subscribe(
+        (res)=>{
+        window.alert('password changed successfully');
+        this.route.navigate(['login']);
+       }),
+       (err: any)=>{
+        window.alert('error occured');
+       }
+
+    }
+
+    changePasswordById(changep:any){
+      return this.http.patch<any>('http://localhost:5500/userchangeById/'+this.user_id,changep).subscribe(
+        (res)=>{
+        window.alert('password changed successfully');
+        this.route.navigate(['login']);
+       }),
+       (err: any)=>{
+        window.alert('error occured');
+       }
 
     }
 
@@ -365,7 +411,8 @@ export class AuthserviceService {
           localStorage.removeItem('token');
           localStorage.removeItem('resetToken');
           localStorage.removeItem('resetId');
-          localStorage.removeItem('resendSender')
+          localStorage.removeItem('resendSender');
+          localStorage.removeItem('role');
           
       }
   

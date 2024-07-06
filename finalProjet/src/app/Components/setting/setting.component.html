@@ -7,6 +7,7 @@
             <div class="float-end">
                 <button class="float-start mx-2" routerLinkActive="active" routerLink="/dashboard" >Home</button>
                 <button class="float-start mx-2" routerLinkActive="active" routerLink="/network">Network</button>
+                <button *ngIf="role=='admin'" class="float-start mx-2" routerLinkActive="active" routerLink="/user">User</button>
                 <button class="float-start mx-2" routerLinkActive="active" routerLink="/friends" >Friends</button>
                 <button class="float-start mx-2" routerLinkActive="active" routerLink="/settings">Settings</button>
                 <button class="float-start mx-2" (click)="logout()">Logout</button>

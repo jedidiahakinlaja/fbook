@@ -14,7 +14,7 @@ export class SettingComponent implements OnInit {
   lastId: any;
   list_id:any
   resetForm!: FormGroup;
-  
+  role:any;
   myReactiveForm:FormGroup=new FormGroup({
     rsFirstName:new FormControl('',[Validators.required]),
     rsLastName:new FormControl('',[Validators.required]),
@@ -29,7 +29,7 @@ export class SettingComponent implements OnInit {
     private authService:AuthserviceService,
     private route:Router
   ) { 
-   
+    this.role=localStorage.getItem('role');
   } 
 
   ngOnInit(): void {
@@ -77,7 +77,8 @@ export class SettingComponent implements OnInit {
     let forgetData:any={
       password:this.resetForm.value.password
     }
-    this.authService.changePassword(forgetData);
+    this.authService.changePasswordById(forgetData);
+    window.alert('clicked')
     this.resetForm.reset();
   }
 

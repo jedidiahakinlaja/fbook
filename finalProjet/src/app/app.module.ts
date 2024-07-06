@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, NG_VALIDATORS, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
@@ -20,6 +20,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { ResetTokenInterceptor } from './interceptors/reset-token.interceptor';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { CheckPasswordDirective } from './directive/password.directive';
+import { NgToastModule } from 'ng-angular-popup'
 
 
 
@@ -45,8 +46,11 @@ import { CheckPasswordDirective } from './directive/password.directive';
     AppRoutingModule,
     HttpClientModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    NgToastModule
+    
   ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA],
   providers: [
    {provide:HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true},
    {provide:HTTP_INTERCEPTORS, useClass:TokenInterceptor,multi:true},

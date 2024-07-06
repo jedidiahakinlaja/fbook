@@ -2,32 +2,89 @@ const User = require('../Models/userModel');
 const bcrypt =require('bcrypt');
 const jwt = require('jsonwebtoken');
 exports.postRegister = (req, res) => {
-    const { firstname, lastname, username, email,  password, dob, image, imagePost } = req.body;
-    bcrypt.hash(password,10)
-      .then(hash=>{
-        const userObj = new User ({
-            firstname,
-            lastname,
-            username,
-            email,
-            dob,
-           password:hash,
-           image,
-           imagePost
-        });
- 
-        userObj.save()
-        .then(response => {
-            res.status(200).json({
-                message: "User Details Saved Successfully",
-                signup: response
-            }) 
-        })
-        .catch( err => {
-            res.status(500).json({ error: err })
-        })
+    const { firstname, lastname, username, email,  password, dob, image, imagePost,role } = req.body;
     
+    let userFound;
+    User.findOne({
+        email
     })
+    .then(user=>{
+
+         userFound= user;
+
+        if(user){
+            userFound= user;
+            if(user.email!=email){
+                
+                console.log(email)
+                bcrypt.hash(password,10)
+                .then(hash=>{
+                  const userObj = new User ({
+                      firstname,
+                      lastname,
+                      username,
+                      email,
+                      dob,
+                     password:hash,
+                     image,
+                     imagePost,
+                     role
+                  });
+           
+                  userObj.save()
+                  .then(response => {
+                    res.status(200).json({
+                        message: "User Details Saved Successfully",
+                        signup: response
+                    }) 
+                })
+                .catch( err => {
+                    res.status(500).json({ error: err })
+                })
+                
+              })    
+
+            }
+           return  res.status(500).json("email found")
+                
+        }
+
+        if(!user){
+            bcrypt.hash(password,10)
+                .then(hash=>{
+                  const userObj = new User ({
+                      firstname,
+                      lastname,
+                      username,
+                      email,
+                      dob,
+                     password:hash,
+                     image,
+                     imagePost,
+                     role
+                  });
+           
+                  userObj.save()
+                  .then(response => {
+                    res.status(200).json({
+                        message: "User Details Saved Successfully",
+                        signup: response
+                    }) 
+                })
+                .catch( err => {
+                    res.status(500).json({ error: err })
+                })
+                
+              })      
+        }
+
+
+       
+       
+       
+    })
+
+           
    
     
 }
@@ -57,11 +114,12 @@ exports.postlogin = (req, res) => {
                 })
             }
     
-            const token = jwt.sign({username:userFound.username,userId:userFound._id},"secret_string",{expiresIn:'1m'})
+            const token = jwt.sign({username:userFound.username,userId:userFound._id, role:userFound.role},"secret_string",{expiresIn:'1m'})
             return res.status(200).json({
                 token:token,
                 username:username,
-                userId:userFound._id
+                userId:userFound._id,
+                role:userFound.role
             })
         })
 
@@ -189,6 +247,32 @@ exports.putUsers=(req,res)=>{
 }
 
 exports.changePassword= async (req,res)=>{
+    const{id}=req.params;
+    
+    const salt= await bcrypt.genSalt(10);
+    const password= await bcrypt.hash(req.body.password, salt);
+    console.log(password)
+
+          User.updateOne({_id:id},{$set:{
+            password:password
+        }
+
+        })
+        .then(response => {
+            res.status(200).json({
+                message: "Password changed Successfully",
+                passwordchanged: response
+            }) 
+        })
+        .catch( err => {
+            res.status(500).json({ error: err })
+        })   
+
+       
+}
+
+
+exports.changePasswordById= async (req,res)=>{
     const{id}=req.params;
     
     const salt= await bcrypt.genSalt(10);

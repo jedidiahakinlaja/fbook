@@ -21,14 +21,14 @@ export class FriendsComponent implements OnInit, OnDestroy {
   user:string| any;
   postfromfriend:any; 
   postfromfriendfilter:any;
-
+  role:any;
   private imageIdSubcription:any;
 
   constructor(private authService:AuthserviceService, private route:Router) { }
  
 
   ngOnInit(): void {
-
+    this.role=localStorage.getItem('role');
     this.authService.getFriend().subscribe((res)=>{
       console.log(res);
         this.friendlist = res

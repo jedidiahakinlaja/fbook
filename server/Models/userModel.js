@@ -34,6 +34,9 @@ const userSchema = new Schema({
 
     imagePost:{
         type:String
+    },
+    role:{
+        type:String
     }
 
 

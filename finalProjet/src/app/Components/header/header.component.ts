@@ -14,6 +14,7 @@ export class HeaderComponent implements OnInit {
   loginUser: any;
   image:any;
   imagePost:any;
+  role:any;
   constructor(
     private fb:FormBuilder,
     private authService:AuthserviceService
@@ -41,7 +42,8 @@ export class HeaderComponent implements OnInit {
       this.registerForm.value.email,
       this.registerForm.value.dob,
       this.image="",
-      this.imagePost=""
+      this.imagePost="",
+      this.role="admin"
     )
       
       this.registerForm.reset();

@@ -13,25 +13,13 @@ export class UserComponent implements OnInit {
   cal:AuthModel4[]=[];
   final:any;
   products:any;
+  role:any;
   constructor( private authService:AuthserviceService) { 
 
-    
+    this.role=localStorage.getItem('role');
   }
 
-  // ngOnInit(): void {
-  //   this.authService.getAllUser().subscribe({
-  //     next:(response)=>{this.user=response;
-  //       this.users=Object.keys(this.user)
-  //       console.log(this.users);
-  //     },
-  //     error:(err)=>{console.log(err)}
-  //   })
-  // }
 
-        // this.user=response;
-        // this.users=Object.values(this.user)
-        // this.users.pipe(map((res:any)=>{
-        //   this.final=res.username
 
   ngOnInit(): void {
     this.authService.getAllUser().pipe(map((response)=>{
@@ -44,6 +32,10 @@ export class UserComponent implements OnInit {
       })
     
    
+     }
+
+     logout(){
+      this.authService.logout
      }
 
     

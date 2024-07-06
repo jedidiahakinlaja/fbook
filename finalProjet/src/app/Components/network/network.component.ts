@@ -24,12 +24,15 @@ export class NetworkComponent implements OnInit, OnDestroy  {
   selected_id:any
   hideUser:any;
   filterlist:any;
+  role:any
 
   private imageIdSubcription:Subscription;
   constructor(
     private authService:AuthserviceService,
     private route:Router
   ) {
+
+    this.role=localStorage.getItem('role');
 
     // this.getSelectid();
      this.getUsername();

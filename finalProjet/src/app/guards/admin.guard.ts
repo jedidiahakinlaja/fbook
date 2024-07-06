@@ -6,8 +6,7 @@ import { AuthserviceService } from '../_service/authservice.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ResetTokenGuard implements CanActivate {
-
+export class AdminGuard implements CanActivate {
   constructor(private authService:AuthserviceService,private router:Router){
 
   }
@@ -15,13 +14,15 @@ export class ResetTokenGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
-      if(this.authService.isresetToken()){
+ 
+        const role= localStorage.getItem('role')
+        console.log(role);
+      if(this.authService.isLogeddIn() && role=='admin'){
         return true;
       }
-       
-        window.alert('please login first from can!!');
-        this.authService.logout();
+        window.alert('you are not unauthorized!!');
         this.router.navigate(['login']);
+        this.authService.logout();
         return false;
       
   }
