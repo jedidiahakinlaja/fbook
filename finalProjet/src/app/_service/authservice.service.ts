@@ -106,12 +106,15 @@ export class AuthserviceService {
 
     //  Send friend request
 
-    sendRequest(senderId:string, receiverId:string, stat:string, img:string){
+    sendRequest(senderId:string, receiverId:string, stat:string, img:string, receiver_firstname:string, receievr_lastname:string, receiver_image:string){
       const requestModel:RequestModel={
         senderId:senderId,
         receiverId:receiverId,
         stat:stat,
-        img:img
+        img:img,
+        receiver_firstname: receiver_firstname, 
+        receievr_lastname:receievr_lastname,
+        receiver_image:receiver_image
       }
 
       this.http.post('http://localhost:5500/friendrequest',requestModel).subscribe(
@@ -120,7 +123,7 @@ export class AuthserviceService {
         window.alert("friend request sent successfuly");
       }),
        (err=>{
-        window.alert("error ocurred, try again")
+        window.alert("friend request sent already")
        })
     )
     }
@@ -327,7 +330,6 @@ export class AuthserviceService {
     uploadImage(image: File): Observable<any> {
       const formData: FormData = new FormData();
       formData.append('image', image, image.name);
-      console.log(this.user_id);
       
       return this.http.put('http://localhost:5500/user/'+this.user_id, formData);
     }
@@ -358,12 +360,15 @@ export class AuthserviceService {
 
 
     reacceptedRequest(){
-      window.alert("reaccapt was called")
+      window.alert("friend requested")
      const requestModel:any={
       senderId:this.user_id,
       receiverId:localStorage.getItem('resendSender'),
       stat:"request accepted",
-      img:localStorage.getItem('resendSender')
+      img:localStorage.getItem('resendSender'),
+      receiver_firstname:localStorage.getItem('resend_firstname'), 
+      receievr_lastname:localStorage.getItem('resend_lastname'),
+      receiver_image:localStorage.getItem('resend_image')
       }
       console.log(requestModel);
       this.http.post('http://localhost:5500/friendrequests',requestModel).subscribe(res=>{
@@ -390,9 +395,7 @@ export class AuthserviceService {
 
 
     editSetting(stud:any){
-      console.log(this.edit_id);
       return this.http.patch<any>('http://localhost:5500/user/' +this.edit_id, stud).subscribe((res)=>{
-        console.log(res)
       })
     }
 
@@ -413,6 +416,9 @@ export class AuthserviceService {
           localStorage.removeItem('resetId');
           localStorage.removeItem('resendSender');
           localStorage.removeItem('role');
+          localStorage.removeItem('resend_firstname');
+          localStorage.removeItem('resend_lastname');
+          localStorage.removeItem('resend_image');
           
       }
   

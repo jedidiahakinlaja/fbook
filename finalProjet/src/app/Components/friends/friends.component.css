@@ -20,3 +20,12 @@
     border: 2px solid red;
     margin-top: 50px;
 }
+
+th{
+    color:white;
+}
+
+td{
+    color:white;
+    font-size: 20px;
+}

@@ -24,9 +24,14 @@ export class NetworkComponent implements OnInit, OnDestroy  {
   selected_id:any
   hideUser:any;
   filterlist:any;
-  role:any
+  role:any;
+  connection:any;
 
   private imageIdSubcription:Subscription;
+  postfromfriend: any;
+  postfromfriendfilter: any;
+  networkList: any;
+  networks: any;
   constructor(
     private authService:AuthserviceService,
     private route:Router
@@ -40,19 +45,33 @@ export class NetworkComponent implements OnInit, OnDestroy  {
       return response;
       
     })).subscribe((res)=>{
-      this.network=res;
-      console.log(this.network);
+      this.connection=res;
+      })
+
+      
+        this.authService.getAllUser().subscribe((res)=>{
+            
+          this.networkList=res;
+          this.networks= Object.keys(this.networkList).length;
+          console.log(this.networks);
+          })
+
+
+      this.authService.viewPostfromFriend().subscribe((res)=>{
+        this.postfromfriend=res;
+        this.postfromfriendfilter= this.postfromfriend.filter(function(result:any){
+          return result.stat='request accepted'
+        })
+          this.connection= Object.keys(this.postfromfriendfilter).length
       })
 
       this.authService.getuserDetails().subscribe((res)=>{
-        console.log(res);
         this.lists=res;
         this.senderId= this.lists._id
       })
 
 
       this.authService.getActionRequest().subscribe((res)=>{
-        console.log(res);
         this.requestlists=res;
         this.filterlist= this.requestlists.filter(function(record:any){
           return record.stat=="request pending"
@@ -61,7 +80,6 @@ export class NetworkComponent implements OnInit, OnDestroy  {
 
       this.authService.getUserbyId();
       this.imageIdSubcription=this.authService.getUserIdStream().subscribe((res)=>{
-      console.log(res);
       this.imageIdData=res;
       this.imagesubImage=this.imageIdData.image
       console.log(this.imagesubImage)
@@ -82,7 +100,6 @@ export class NetworkComponent implements OnInit, OnDestroy  {
      
      getUserId(){
        this.senderId= localStorage.getItem('senderId');
-       console.log('hello world');
        return this.senderId;
      }
 
@@ -93,12 +110,12 @@ export class NetworkComponent implements OnInit, OnDestroy  {
      
     }
 
-     request(receiverId:any){
+     request(receiverId:any, receiver_firstname:any, receievr_lastname:any, receiver_image:any ){
       this.getUserId();
       console.log(receiverId);
       this.stat="request pending";
       this.img='';
-      this.authService.sendRequest(this.senderId,receiverId, this.stat, receiverId);
+      this.authService.sendRequest(this.senderId,receiverId, this.stat, receiverId, receiver_firstname, receievr_lastname, receiver_image);
      }
 
 
@@ -107,11 +124,15 @@ export class NetworkComponent implements OnInit, OnDestroy  {
       localStorage.setItem('selected_id',this.selected_id);
       this.stats="request accepted";
       localStorage.setItem('resendSender',this.filterlist[0].senderId)
+      localStorage.setItem('resend_firstname',this.filterlist[0].receiver_firstname)
+      localStorage.setItem('resend_lastname',this.filterlist[0].receiver_lastname)
+      localStorage.setItem('resend_image',this.filterlist[0].receiver_image)
       let request:any={
         stat:this.stats
       }
 
       this.authService.friendRequested(this.selected_id, request);
+      location.reload();
      }
 
      

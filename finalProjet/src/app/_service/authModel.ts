@@ -18,7 +18,7 @@ export interface AuthModel3{
     username:string
 }
 export interface AuthModel4{
-id: any;
+    id: any;
     firstname:string,
     lastname:string,
     username:string,
@@ -35,7 +35,10 @@ export interface RequestModel{
     senderId:string,
     receiverId:string,
     stat:string,
-    img:string
+    img:string,
+    receiver_firstname:string,
+    receievr_lastname:string, 
+    receiver_image:string
 }
 
 export interface selectModel{

@@ -31,12 +31,12 @@
             </div>
             <div class="row border border-danger">
                 <div class="col-sm-12">
-                    <p>XXX CONNECTION</p>
+                    <p> NETWORK: {{connection}}</p>
                 </div>
             </div>
             <div class="row border border-danger">
                 <div class="col-sm-12">
-                    <p>XXX POSITION</p>
+                    <p>  CONNECTION: {{networks}}</p>
                 </div>
             </div>
         </div>
@@ -53,9 +53,9 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let net of network ">
+                          <tr *ngFor="let net of connection ">
                             <td *ngIf="hideUser!=net.username">{{net.firstname}}</td>
-                            <td *ngIf="hideUser!=net.username"><button class="btn btn-primary" (click)="request(net._id)">Request</button></td>
+                            <td *ngIf="hideUser!=net.username"><button class="btn btn-primary" (click)="request(net._id, net.firstname, net.lastname, net.image)">Request</button></td>
                           </tr>
                         </tbody>
                       </table>

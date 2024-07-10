@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, map } from 'rxjs';
 import { Profile } from 'src/app/_service/authModel';
 import { AuthserviceService } from 'src/app/_service/authservice.service';
 
@@ -23,6 +23,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   postfromfriend:any; 
   postfromfriendfilter:any;
   role:any;
+  requestlists: any;
+  filterlist: any;
+  connection:any;
+  network: any;
+  networkList:any
 
   constructor(private authService:AuthserviceService,
     private route:Router
@@ -30,24 +35,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
      this.role=localStorage.getItem('role');
      this.authService.getuserDetails().subscribe((res)=>{
       this.user=res;
-      console.log();
+      console.log(res);
     })
+
+
+    this.authService.getAllUser().subscribe((res)=>{
+     
+      this.networkList=res;
+      this.network= Object.keys(this.networkList).length;
+      console.log(this.network);
+      })
 
     this.authService.viewPostfromFriend().subscribe((res)=>{
       this.postfromfriend=res;
       this.postfromfriendfilter= this.postfromfriend.filter(function(result:any){
         return result.stat='request accepted'
       })
-      console.log(this.postfromfriendfilter);
+        this.connection= Object.keys(this.postfromfriendfilter).length
     })
        this.authService.getUserbyId();
       this.imageIdSubcription=this.authService.getUserIdStream().subscribe((res)=>{
-      console.log(res);
       this.imageIdData=res;
-      this.imagesubImage=this.imageIdData.image
-      console.log(this.imagesubImage)
+      this.imagesubImage=this.imageIdData.image;
     })
      
+    this.authService.getActionRequest().subscribe((res)=>{
+      console.log(res);
+      this.requestlists=res;
+      this.filterlist= this.requestlists.filter(function(record:any){
+        return record.stat=="request pending"
+      })
+    })
     
 
    }
@@ -80,6 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         error => console.error('Upload error', error)
       );
     }
+      location.reload();
      }
 
 
@@ -90,6 +109,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         error => console.error('Upload error', error)
       );
     }
+    location.reload();
   }
 
   onFileSelect(event: Event) {

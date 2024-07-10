@@ -13,6 +13,15 @@ const friendSchema = mongoose.Schema({
    stat:{
         type: String,
    },
+   receiver_firstname:{
+      type:String
+   }, 
+   receievr_lastname:{
+      type:String
+   }, 
+   receiver_image:{
+      type:String
+   },
    img:{
       type:mongoose.Schema.Types.ObjectId, ref:'userDetails'
    }

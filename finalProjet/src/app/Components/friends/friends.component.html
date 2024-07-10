@@ -42,17 +42,18 @@
         </div>
 
         <div class=" offset-sm-2 col-sm-6 border border-success">
-            <p  style="text-align: center;">Friend Request Sent</p>
+            <p  style="text-align: center;">Friend</p>
             <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Information</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let nets of filterFriendlist ">
-                    <td>{{nets.img.firstname}}</td>
+                    <td><img src="{{nets.img.image}}" alt="image not found" *ngIf="nets.img.image!=''" class="img-fluid img-thumbnail" style="width:100px; border-radius: 40%; height:70px;" alt=""></td>
+                    <td><div>{{nets.img.lastname}}</div><span>{{nets.img.firstname}}</span></td>
                   </tr>
                 </tbody>
               </table>
